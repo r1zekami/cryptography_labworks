@@ -160,22 +160,34 @@
     <ClCompile Include="cryptography.cpp" />
     <ClCompile Include="alghoritms.cpp" />
     <ClCompile Include="Elgamal\Elgamal.cpp" />
+    <ClCompile Include="Hash-functions\hash-functions.cpp" />
     <ClCompile Include="Rabin\Rabin.cpp" />
     <ClCompile Include="RSA\RSA.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="alghoritms.h" />
+    <ClInclude Include="Digital-signature\Client\client.hpp" />
+    <ClInclude Include="Digital-signature\Server\server.hpp" />
     <ClInclude Include="Elgamal\Elgamal.h" />
+    <ClInclude Include="Hash-functions\hash-functions.h" />
     <ClInclude Include="Rabin\Rabin.h" />
     <ClInclude Include="RSA\RSA.h" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Digital-signature\Client\Keys\private.key" />
+    <Content Include="Digital-signature\Client\Keys\public.key" />
+    <Content Include="Digital-signature\Client\Keys\server-public.key" />
+    <Content Include="Digital-signature\Client\request.json" />
+    <Content Include="Digital-signature\Client\response.json" />
+    <Content Include="Digital-signature\Server\answer.json" />
+    <Content Include="Digital-signature\Server\Keys\client-public.key" />
+    <Content Include="Digital-signature\Server\Keys\private.key" />
+    <Content Include="Digital-signature\Server\Keys\public.key" />
     <Content Include="Elgamal\ciphertext.txt" />
     <Content Include="Elgamal\decrypted.txt" />
     <Content Include="Elgamal\plaintext.txt" />
     <Content Include="Elgamal\private.key" />
     <Content Include="Elgamal\public.key" />
-    <Content Include="input.txt" />
     <Content Include="Rabin\ciphertext.txt" />
     <Content Include="Rabin\decrypted.txt" />
     <Content Include="Rabin\plaintext.txt" />
@@ -186,6 +198,7 @@
     <Content Include="RSA\plaintext.txt" />
     <Content Include="RSA\private.key" />
     <Content Include="RSA\public.key" />
+    <Content Include="tests.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

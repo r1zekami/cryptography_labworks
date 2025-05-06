@@ -10,6 +10,7 @@
 #include <set>
 #include <fstream>
 #include <map>
+#include <bitset>
 
 using namespace boost::multiprecision;
 
@@ -57,10 +58,8 @@ std::vector<bi> solve_1d_congruence(bi a, bi b, bi p);
 std::tuple<bi, bi> solve_2d_congruence(bi a, bi p);
 bi solve_1d_congruence_system(const std::vector<bi>& remainders, const std::vector<bi>& moduli);
 void printPolynomial(const std::vector<bi>& poly);
-
 bi pollard_method(bi n);
 bi pollard_p1_method(bi n);
-
 std::vector<cpp_int> find_divisors_sqrt(cpp_int n);
 std::vector<bi>  pollard_p_method(bi p, bi a, bi b);
 bi find_r(bi a, bi p);
@@ -69,13 +68,93 @@ void pollard_method_file_tests(std::string filename);
 
 
 
+
 std::vector<uint8_t> PKCS7_Padding(const std::vector<uint8_t>& data, size_t block_size);
 std::vector<uint8_t> PKCS7_Unpadding(const std::vector<uint8_t>& data);
-
-std::vector<uint8_t> TextToBytes(const std::string& text);
 std::string BytesToText(const std::vector<uint8_t>& bytes);
-
 std::vector<bi> ChunkMessage(const std::vector<uint8_t>& bytes, size_t block_size);
 std::vector<uint8_t> UnchunkMessage(const std::vector<bi>& chunks, size_t block_size);
-
 std::map<std::string, bi> ReadKey(const std::string& KeyFile);
+
+
+
+std::vector<uint8_t> TextToBytes(const std::string& text);
+std::vector<uint8_t> reverseBytes(const std::vector<uint8_t>& bytes);
+std::vector<uint8_t> UINT128ToBytes(uint128_t num);
+std::vector<uint8_t> UINT64ToBytes(uint64_t num);
+
+std::string concateUINT32Hexes(uint32_t value);
+std::string concateUINT64Hexes(uint64_t value);
+
+template <typename T>
+T bytesToUINT(std::vector<uint8_t> data)
+{
+    T result = 0;
+    int temp = 0;
+    if constexpr (std::is_same_v<T, uint8_t> || std::is_same_v<T, uint16_t> || std::is_same_v<T, uint32_t> || std::is_same_v<T, uint64_t>)
+    {
+        if constexpr (std::is_same_v<T, uint8_t>) {
+            printf("[Warn][alghoritms.h/bytesToUINT] Type uint8_t to uint8_t, set first byte as \\0x%x\n", data[0]);
+            return data[0];
+        }
+        if (data.size() > sizeof(T)) {
+            printf("[Warn][alghoritms.h/bytesToUINT] Chosen type (STD) cannot contain the whole array, it will cut down\n");
+        }
+        if (data.size() < sizeof(T)) {
+                printf("[Warn][alghoritms.h/bytesToUINT] Array size is smaller than expected, filling it with zeroes\n");
+                data.insert(data.begin(), (sizeof(T) - size(data)), 0x00);
+            }
+        } else
+        {
+            //std::cout << sizeof(T) << " dt: " << data.size() << std::endl;
+
+            // for (auto i : data)
+            // {
+            //     std::cout << i << " ";
+            // }
+            //std::cout << "\n\n";
+            temp = 8;
+            if (data.size() > (sizeof(T) - 8)) {
+                printf("[Warn][alghoritms.h/bytesToUINT] Chosen type (BOOST) cannot contain the whole array, array will cut down\n");
+            }
+        if (data.size() < (sizeof(T) - 8)) {
+            printf("[Warn][alghoritms.h/bytesToUINT] Array size is smaller than expected, filling it with zeroes\n");
+            data.insert(data.begin(), ((sizeof(T) - 8) - size(data)), 0x00);
+        }
+    }
+
+    //std::cout << sizeof(T) - 1 - temp << std::endl;
+    for (int i = 0; i < (sizeof(T) - temp); i++) {
+        result |= static_cast<T>(data[(sizeof(T) - 1 - temp - i)]) << (i * 8);
+    }
+    return result;
+}
+
+
+template <typename T>
+std::vector<uint8_t> UINTToBytes(T num)
+{
+    if constexpr (std::is_same_v<T, uint8_t> || std::is_same_v<T, uint16_t> || std::is_same_v<T, uint32_t> || std::is_same_v<T, uint64_t>)
+    {
+        std::vector<uint8_t> bytes;
+        for (int i = 0; i < (sizeof(num)); i++) {
+            uint8_t byte = static_cast<uint8_t>((num >> (((sizeof(num)) - 1 - i) * 8)) & 0xFF);
+            bytes.push_back(byte);
+        }
+        return bytes;
+    } else
+    {
+        std::vector<uint8_t> bytes;
+        for (int i = 8; i < (sizeof(num)); i++) {
+            uint8_t byte = static_cast<uint8_t>((num >> (((sizeof(num)) - 1 - i) * 8)) & 0xFF);
+            bytes.push_back(byte);
+        }
+        return bytes;
+    }
+}
+
+
+std::string toHexString(uint512_t number);
+
+std::vector<uint8_t> hexStringToBytes(const std::string& hex);
+

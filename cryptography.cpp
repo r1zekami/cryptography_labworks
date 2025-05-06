@@ -4,198 +4,90 @@
 #include "Elgamal/Elgamal.h"
 #include "Rabin/Rabin.h"
 #include "RSA/RSA.h"
-
+#include "Hash-functions/hash-functions.h"
+#include "Digital-signature/Client/client.hpp"
+#include "Digital-signature/Server/server.hpp"
 
 int main() {
+
+
+    // std::cout << base64::encode("Helloworld!") << std::endl;
+    // std::cout << base64::encode("Helloworld!!") << std::endl;
+    // std::cout << base64::encode("Helloworld!!!") << std::endl;
+    //
+    // std::cout << base64::decode("SGVsbG93b3JsZCE=") << std::endl;
+    // std::cout << base64::decode("SGVsbG93b3JsZCEh") << std::endl;
+    // std::cout << base64::decode("SGVsbG93b3JsZCEhIQ==") << std::endl;
+    //
+    //
+    // std::cout << base32::encode("Helloworld!") << std::endl;
+    // std::cout << base32::encode("Helloworld!!") << std::endl;
+    // std::cout << base32::encode("Helloworld!!!") << std::endl;
+    // std::cout << base32::encode("Helloworld!!!!") << std::endl;
+    // std::cout << base32::encode("Helloworld!!!!!") << std::endl;
+    //
+    //
+    // std::cout << base32::decode("JBSWY3DPO5XXE3DEEE======") << std::endl;
+    // std::cout << base32::decode("JBSWY3DPO5XXE3DEEEQQ====") << std::endl;
+    // std::cout << base32::decode("JBSWY3DPO5XXE3DEEEQSC===") << std::endl;
+    // std::cout << base32::decode("JBSWY3DPO5XXE3DEEEQSCII=") << std::endl;
+    // std::cout << base32::decode("JBSWY3DPO5XXE3DEEEQSCIJB") << std::endl;
     
-    // Fast Pow --------------------------------------------------------------------------------------------------------
-    std::cout << "36 ^ 36 = " << fast_exp(36, 36) << "\n";
-    std::cout << "3 ^ 11 (mod 123) = " << fast_exp_mod(3, 11, 123) << "\n";
-    std::cout << "4 ^ 6 (mod 7) = " <<fast_exp_mod(4, 6, 7) << "\n\n";
+    // std::string messageStr = "abobusIKGASDF,PASKDF;IASJDFMLAISDUJF9Q843RFJORUAFEHNSUIDFNSAIDLFJANSDFOIAJFAORUEWFJRF8FJAWEOIWFJWEIFOJEMFOALIJFEMWFLIOJEIF";
+    // uint512_t hash_value = uint512_t(STREEBOG::cyberchefHash256(messageStr));
+    // uint512_t hash_value2 = STREEBOG::hash256(messageStr);
+    // std::cout << std::hex << hash_value << std::endl;
 
-    // Extended Euclidean Algorithm ------------------------------------------------------------------------------------
-    auto [r, b, a] =  extended_euclidean_alg(163, 12342);
-    printf("Extended Euclidean Algorithm for 163, 12342:\n");
-    std::cout << r << " " << a << " " << b << " \n\n";
 
-    // Jacobi Symbol ---------------------------------------------------------------------------------------------------
-    printf("Jacoby Symbol for 6, 5:\n");
-    std::cout << jacobi(6, 5) << "\n\n";
-    //------------------------------------------------------------------------------------------------------------------
-
-    
-    
-    // Ferma Tests -----------------------------------------------------------------------------------------------------
-    printf("Ferma Tests:\n");
-    std::cout << ferma(bi("7111111111111111177879")) << '\n';
-    std::cout << ferma(bi("712311111111712311111111712311111111712311111111"
-        "7123111111117123111111111111111111177879")) << '\n';
-    std::cout << ferma(bi("127")) << '\n';
-    std::cout << ferma(bi("9")) << "\n\n";
-
-    // Solovay-Strassen Tests ------------------------------------------------------------------------------------------
-    printf("Solovay-Strassen Tests:\n");
-    std::cout << solovay_strassen_test(bi("712311111111712311111111712311111111712311111111"
-         "7123111111117123111111111111111111177879")) << '\n';
-    std::cout << solovay_strassen_test(bi("12")) << '\n';
-    std::cout << solovay_strassen_test(bi("7")) << '\n';
-    std::cout << solovay_strassen_test(17) << "\n";
-    std::cout << solovay_strassen_test(18) << "\n\n";
-
-    // Miller-Rabin Tests ----------------------------------------------------------------------------------------------
-    printf("Miller-Rabin Tests:\n");
-    std::cout << miller_rabin_test(bi("712311111111712311111111712311111111712311111111"
-         "7123111111117123111111111111111111177879")) << '\n';
-    std::cout << miller_rabin_test(bi("12")) << '\n';
-    std::cout << miller_rabin_test(bi("7")) << '\n';
-    std::cout << miller_rabin_test(17) << '\n';
-    std::cout << miller_rabin_test(18) << "\n\n";
-    //------------------------------------------------------------------------------------------------------------------
-
+    // uint64_t num = 0x12345678; // Пример числа
+    // std::vector<uint8_t> result = UINTToBytes(num);
+    // for (int i = 0; i < result.size(); i++)
+    // {
+    //     printf("\\0x%x", result[i]);
+    // }
     
     
-    // Prime number generation -----------------------------------------------------------------------------------------
-    printf("Prime number generation:\n");
-    std::cout << generate_prime(10) << '\n';
-    std::cout << generate_prime(100) << '\n';
-    printf("\n");
-    //------------------------------------------------------------------------------------------------------------------
+    // std::vector<uint8_t> bytes1 = {0x12, 0x23, 0x45, 0x67, 0x89, 0xAB, 0xCD, 0x12, 0x23, 0x45, 0x67, 0x89, 0xAB, 0xCD, 0xAB, 0xAB};
+    // uint128_t val1 = bytesToUINT<uint128_t>(bytes1);
+    // std::cout << std::hex << val1 << std::endl;
+
+    // std::cout << SHA512::hashMessage("Hello World!!!") << '\n';
+    // std::cout << SHA512::hashMessage("Hello World!!!") << '\n';
+    // std::cout << SHA512::hashMessage("Hello World!!!") << '\n';
+    
+    //std::cout << HMAC::hashMessage<SHA512>("Hello World!!!", "1123sdambasdfasdf4ra4warcft55w45sy5ysft54t53gtscwt5f5w5yww534j63") << "\n";
+    
+    //std::cout << HMAC::hashMessage<SHA256>("Hello World!!!", "1123sd") << "\n";
+
+    //std::cout << STREEBOG512CHEF::hashMessage("Hello World!!Hello World!!Hello World!!Hello World!!Hello World!1");
+    
+    // std::cout << "HMAC SHA 512:" << HMAC::hashMessage<SHA512>("Hello World!!!", "1123sd") << "\n\n";
+    // std::cout << "HMAC SHA 256:" << HMAC::hashMessage<SHA256>("Hello World!!!", "1123sd") << "\n\n";
+    // std::cout << "HMAC GOST STRBG 256:" << HMAC::hashMessage<STREEBOG256>("Hello World!!!", "1123sd") << "\n\n";
+    // std::cout << "HMAC GOST STRBG 512:" << HMAC::hashMessage<STREEBOG512>("Hello World!!!", "1123sd") << "\n\n";
+    // std::cout << "HMAC CHEF STRBG 256:" << HMAC::hashMessage<STREEBOG256CHEF>("Hello World!!!", "1123sd") << "\n\n";
+    // std::cout << "HMAC CHEF STRBG 512:" << HMAC::hashMessage<STREEBOG512CHEF>("Hello World!!!", "1123sd") << "\n\n";
+
+    // Client<RSA, SHA512> Client("127.0.0.1", "8888", "MessageToSign");
+    // Client.Run();
+
+    // Server server("127.0.0.1", "8889");
+    // server.Run();
+    int res = 0;
+    std::cin >> res;
+    
+    if (res == 0)
+    {
+        Server server("127.0.0.1", "8888");
+        server.Run();
+    } else
+    {
+        Client<ELGAMAL, SHA512> Client("127.0.0.1", "8888", "MessageToSign");
+        Client.Run();
+    }
 
     
-
-    // Quadratic congruence --------------------------------------------------------------------------------------------
-    for (auto i : solve_1d_congruence(6, 26, 22)) { std::cout << i << " "; }
-    printf("\n");
-    
-    // Quadratic congruence --------------------------------------------------------------------------------------------
-    auto [x1_1, x2_1] = solve_2d_congruence(2, 7);
-    std::cout << "Test 1: solve_2d_congruence(2, 7) -> " << x1_1 << ", " << x2_1 << "\n";
-    auto [x1_2, x2_2] = solve_2d_congruence(3, 11);
-    std::cout << "Test 2: solve_2d_congruence(3, 11) -> " << x1_2 << ", " << x2_2 << "\n";
-    auto [x1_3, x2_3] = solve_2d_congruence(5, 13);
-    std::cout << "Test 3: solve_2d_congruence(5, 13) -> " << x1_3 << ", " << x2_3 << "\n";
-    auto [x1_4, x2_4] = solve_2d_congruence(8, 17);
-    std::cout << "Test 4: solve_2d_congruence(8, 17) -> " << x1_4 << ", " << x2_4 << "\n";
-    printf("\n");
-    
-    // System of linear congruences (The Chinese Remainder Theorem) ----------------------------------------------------
-    printf("System of linear congruences (The Chinese Remainder Theorem):\n");
-    bi result1 = solve_1d_congruence_system({2, 3, 1}, {3, 5, 7});
-    std::cout << "Test 1: " << result1 << "\n";
-    bi result2 = solve_1d_congruence_system({1, 2}, {5, 11});
-    std::cout << "Test 2: " << result2 << "\n";
-    bi result3 = solve_1d_congruence_system({4, 3, 2}, {7, 9, 11});
-    std::cout << "Test 3: " << result3 << "\n\n";
-    //------------------------------------------------------------------------------------------------------------------
-
-
-    
-    // Galois Filed ( GF(p^k) ) ----------------------------------------------------------------------------------------
-    printf("Galois field ( GF(p^k) ) implementation:\n");
-    bi p = 2; bi k = 2;
-    galois_field gf(p, k, {1, 1, 1});
-    gf.print();
-    
-    printPolynomial(gf.sum({0, 1, 0}, {1, 1, 0}));
-    printPolynomial(gf.product({0, 1, 0}, {1, 1, 0})); 
-    printPolynomial(gf.product({1, 0, 1}, {1, 1, 0}));
-    printPolynomial(gf.product({1, 1, 1}, {0, 1, 1}));
-    printPolynomial(gf.sum({1, 1, 1}, {0}));
-    printPolynomial(gf.product({1, 1, 1}, {1}));
-    printPolynomial(gf.product({0, 1, 1}, {1, 1, 0}));
-    printPolynomial(gf.sum({1, 1, 1}, {1, 1, 1}));
-    printPolynomial(gf.product({1, 1, 1}, {0}));
-    printf("\n");
-    //------------------------------------------------------------------------------------------------------------------
-
-
-    
-    // Pollard Method (Factorization) ----------------------------------------------------------------------------------
-    printf("Pollard Method (Factorization):\n");
-    std::cout << 91 << " = " << pollard_method(91) << " * " << 91 / pollard_method(91) << "\n";
-    std::cout << 291 << " = " << pollard_method(291) << " * " << 291 / pollard_method(291) << "\n";
-    printf("\n");
-    
-    // P-1 Pollard Method (Factorization) ------------------------------------------------------------------------------
-    printf("P-1 Pollard Method (Factorization):\n");
-    std::cout << "1: n = " << bi("17") << ", div = " << pollard_p1_method(bi("17")) << '\n';
-    std::cout << "2: n = " << bi("10403") << ", div = " << pollard_p1_method(bi("10403")) << '\n';
-    std::cout << "3: n = " << bi("123456789") << ", div = " << pollard_p1_method(bi("123456789")) << '\n';
-    std::cout << "4: n = " << bi("999999999999999999") << ", div = " <<
-        pollard_p1_method(bi("999999999999999999")) << '\n';
-    std::cout << "5: n = " << bi("2147483647") << ", div = " << pollard_p1_method(bi("2147483647")) << '\n';
-    printf("\n");
-    
-    // P-Pollard Method (Log) ------------------------------------------------------------------------------------------
-    printf("P-Pollard Method (Log):\n");
-    for (auto i : pollard_p_method(23, 5, 7)) { std::cout << i << " "; } printf("\n");
-    for (auto i : pollard_p_method(13, 2, 8)) { std::cout << i << " "; } printf("\n");
-    for (auto i : pollard_p_method(101, 7, 56)) { std::cout << i << " "; } printf("\n\n");
-    
-    //------------------------------------------------------------------------------------------------------------------
-
-
-    
-    //RSA Tests---------------------------------------------------------------------------------------------------------
-    // For implementation look into RSA directory
-    printf("RSA Tests:\n");
-    std::string RSA_Public_Key = "RSA/public.key";
-    std::string RSA_Private_Key = "RSA/private.key";
-    std::string RSA_Plaintext_File = "RSA/plaintext.txt";
-    std::string RSA_Ciphertext_File = "RSA/ciphertext.txt";
-    std::string RSA_Decrypted_File = "RSA/decrypted.txt";
-    
-    RSA::GenerateKeys(RSA_Public_Key, RSA_Private_Key, 512);
-    auto ciphertext = RSA::Encrypt(RSA_Plaintext_File, RSA_Public_Key);
-    RSA::WriteEncryptedMessage(ciphertext, RSA_Ciphertext_File);
-    std::string decryptedText = RSA::Decrypt(RSA_Ciphertext_File, RSA_Private_Key);
-    std::ofstream outputFile(RSA_Decrypted_File);
-    outputFile << decryptedText;
-    outputFile.close();
-    printf("\n");
-    //------------------------------------------------------------------------------------------------------------------
-
-    
-    
-    //Rabin Tests---------------------------------------------------------------------------------------------------------
-    // For implementation look into Rabin directory
-    printf("Rabin Tests:\n");
-    std::string Rabin_Public_Key = "Rabin/public.key";
-    std::string Rabin_Private_Key = "Rabin/private.key";
-    std::string Rabin_Plaintext_File = "Rabin/plaintext.txt";
-    std::string Rabin_Ciphertext_File = "Rabin/ciphertext.txt";
-    std::string Rabin_Decrypted_File = "Rabin/decrypted.txt";
-
-    RABIN::GenerateKeys(Rabin_Public_Key, Rabin_Private_Key, 256); //n = 512, block 64
-    auto rab_ciphertext = RABIN::Encrypt(Rabin_Plaintext_File, Rabin_Public_Key);
-    RABIN::WriteEncryptedMessage(rab_ciphertext, Rabin_Ciphertext_File);
-    std::string rab_decryptedText = RABIN::Decrypt(Rabin_Ciphertext_File, Rabin_Private_Key);
-    std::ofstream rab_outputFile(Rabin_Decrypted_File);
-    rab_outputFile << rab_decryptedText;
-    rab_outputFile.close();
-    printf("\n");
-    //------------------------------------------------------------------------------------------------------------------
-
-
-    //Elgamal Tests---------------------------------------------------------------------------------------------------------
-    // For implementation look into Elgamal directory
-    printf("Elgamal Tests:\n");
-    std::string Elgamal_Public_Key = "Elgamal/public.key";
-    std::string Elgamal_Private_Key = "Elgamal/private.key";
-    std::string Elgamal_Plaintext_File = "Elgamal/plaintext.txt";
-    std::string Elgamal_Ciphertext_File = "Elgamal/ciphertext.txt";
-    std::string Elgamal_Decrypted_File = "Elgamal/decrypted.txt";
-    ELGAMAL::GenerateKeys(Elgamal_Public_Key, Elgamal_Private_Key, 256);
-    auto elg_ciphertext = ELGAMAL::Encrypt(Elgamal_Plaintext_File, Elgamal_Public_Key);
-    ELGAMAL::WriteEncryptedMessage(elg_ciphertext, Elgamal_Ciphertext_File);
-    std::string elg_decryptedText = ELGAMAL::Decrypt(Elgamal_Ciphertext_File, Elgamal_Private_Key);
-    std::ofstream elg_outputFile(Elgamal_Decrypted_File);
-    elg_outputFile << elg_decryptedText;
-    elg_outputFile.close();
-    printf("\n");
-    //------------------------------------------------------------------------------------------------------------------
-
+    std::cin.get();
     
     return 0;
-    
 }

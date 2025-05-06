@@ -207,7 +207,7 @@ bi generate_prime(uint64_t k) {
     if (k <= 1) return 2;
     
     boost::random::mt19937 gen(std::random_device{}());
-    boost::random::uniform_int_distribution<bi> dist(fast_exp(2,k-1), fast_exp(2, k));
+    boost::random::uniform_int_distribution<bi> dist((fast_exp(2,k) - 1), fast_exp(2, k+1) - 1);
     bi p(0);
     while (true) {
         p = dist(gen);
@@ -221,6 +221,7 @@ bi generate_prime(uint64_t k) {
         
         if (miller_rabin_test(p))
         {
+            //std::cout << msb(p) << std::endl;
             return p;
         }
     }
@@ -266,7 +267,6 @@ std::tuple<bi, bi> solve_2d_congruence(bi a, bi p) {
     bi a1 = fast_exp_mod(a, (h + 1) / 2, p);
     bi a2 = fast_exp_mod(a, p - 2, p); // a^{-1} mod p
 
-    // Ищем квадратичный невычет N (исправлено!)
     bi N = 2;
     while (jacobi(N, p) != -1) {
         N++;
@@ -276,7 +276,6 @@ std::tuple<bi, bi> solve_2d_congruence(bi a, bi p) {
     bi N2 = 1;
     bi j = 0;
 
-    // Итерации для k-1 шагов (коррекция корня)
     for (bi i = 0; i < k - 1; ++i) {
         bi b = (a1 * N2) % p;
         bi c = (a2 * b * b) % p;
@@ -742,4 +741,72 @@ std::map<std::string, bi> ReadKey(const std::string& KeyFile) {
 
     file.close();
     return Key;
+}
+
+//
+//----------------------------------------------------------------------------------------------------------------------
+//------------------------------------------------utilities-------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
+//
+
+
+std::vector<uint8_t> reverseBytes(const std::vector<uint8_t>& bytes) {
+    std::vector<uint8_t> result = bytes;
+    std::reverse(result.begin(), result.end());
+    return result;
+}
+
+std::vector<uint8_t> UINT128ToBytes(uint128_t num)
+{
+    std::vector<uint8_t> bytes;
+    for (int i = 0; i < 16; i++) {
+        uint8_t byte = static_cast<uint8_t>((num >> ((15 - i) * 8)) & 0xFF);
+        bytes.push_back(byte);
+    }
+    return bytes;
+}
+
+std::vector<uint8_t> UINT64ToBytes(uint64_t num)
+{
+    std::vector<uint8_t> bytes;
+    for (int i = 0; i < 8; i++) {
+        uint8_t byte = static_cast<uint8_t>((num >> ((7 - i) * 8)) & 0xFF);
+        bytes.push_back(byte);
+    }
+    return bytes;
+}
+
+
+std::string concateUINT64Hexes(uint64_t value)
+{
+    std::stringstream ss;
+    ss << std::hex << std::setw(16) << std::setfill('0') << value;
+    return ss.str();
+}
+
+std::string concateUINT32Hexes(uint32_t value)
+{
+    std::stringstream ss;
+    ss << std::hex << std::setw(8) << std::setfill('0') << value;
+    return ss.str();
+}
+
+
+std::string toHexString(uint512_t number) {
+    std::stringstream ss;
+    ss << "0x" << std::hex << number;
+    return ss.str();
+}
+
+std::vector<uint8_t> hexStringToBytes(const std::string& hex) {
+    if (hex.substr(0, 2) != "0x") {
+        throw std::invalid_argument("Hex string must start with '0x'");
+    }
+    std::vector<uint8_t> bytes;
+    for (size_t i = 2; i < hex.size(); i += 2) {
+        std::string byteString = hex.substr(i, 2);
+        uint8_t byte = static_cast<uint8_t>(std::stoi(byteString, nullptr, 16));
+        bytes.push_back(byte);
+    }
+    return bytes;
 }
