@@ -14,6 +14,7 @@
 #include "cipher-systems/AES/AES.hpp"
 #include "digital-signature/group-ds/group-ds-tsa-server.hpp"
 
+
 bool is_tsa_server() {
     const std::string lock_file = "tsa_server.lock";
     std::ifstream lock_check(lock_file);
@@ -136,25 +137,51 @@ int main() {
     //
     
     
-    /*
+    ///*
+    ///
+    ///
+
+    // boost::random::mt19937 gen(std::random_device{}());
+    // boost::random::uniform_01<bool> c_dist;
+    //
+    // bool c = c_dist(gen);
+    // std::cout << c;
+    //
+    // return 0;
+
+    // AuthClient AuthClient("Alice", Proto::KeyExchange);
+    // AuthClient.Run();
     
-    int res = 0;
-    std::cin >> res;
-    if (res == 0) {
-        // DSClient<RSA, SHA256> DSClient("127.0.0.1", "8888", "MessageToSign");
-        // DSClient.Run();
-        
-        AuthServer AuthServer("Bob", Proto::SingleUsePasswords);
-        AuthServer.Run();
-    } else
-    {
-        // DSServer DSServer("127.0.0.1", "8888");
-        // DSServer.Run();
-        
-        AuthClient AuthClient("Alice", Proto::SingleUsePasswords);
-        AuthClient.Run();
-    }
-    std::cin.get();
+     int res = 0;
+     std::cin >> res;
+     if (res == 0) {
+         // DSClient<RSA, SHA256> DSClient("127.0.0.1", "8888", "MessageToSign");
+         // DSClient.Run();
+         
+         AuthServer AuthServer("Bob", Proto::KeyExchange);
+         AuthServer.Run();
+    
+         // asioLocalNetworkingTemplate serv;
+         // std::string res = serv.ListenAndReceive(9999);
+         // res = serv.ListenAndReceive("9999");
+         // res = serv.ListenAndReceive(9999);
+         
+     } else
+     {
+         // asioLocalNetworkingTemplate zxcv234;
+         // zxcv234.SendMsg(9999, "123123123Hello");
+         // zxcv234.SendMsg("9999", "123123123Hello213");
+         // zxcv234.SendMsg(9999, "123123123Hell123o");
+         
+         // DSServer DSServer("127.0.0.1", "8888");
+         // DSServer.Run();
+         
+         AuthClient AuthClient("Alice", Proto::KeyExchange);
+         AuthClient.Run();
+    
+         
+     }
+     std::cin.get();
 
     //*/
 
@@ -169,15 +196,15 @@ int main() {
     
     //GDSNode::GDSCrypto::GenerateAndSaveLeaderKeys();
     
-    if (is_tsa_server()) {
-     std::cout << "[Main] Starting as TSA server on port 7999\n";
-     GDSServer server;
-     server.Run();
-    } else {
-     std::cout << "[Main] TSA server already running, starting as GDS node\n";
-     GDSNode node;
-     node.Run();
-    }
+    // if (is_tsa_server()) {
+    //  std::cout << "[Main] Starting as TSA server on port 7999\n";
+    //  GDSServer server;
+    //  server.Run();
+    // } else {
+    //  std::cout << "[Main] TSA server already running, starting as GDS node\n";
+    //  GDSNode node;
+    //  node.Run();
+    // }
     
     // return 0;
     std::cin.get();
