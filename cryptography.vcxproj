@@ -241,9 +241,9 @@
     <ClCompile Include="cipher-systems\RSA\RSA.cpp" />
     <ClCompile Include="cryptography.cpp" />
     <ClCompile Include="alghoritms.cpp" />
-    <ClCompile Include="digita-signature\group-ds\group-ds-net.cpp" />
-    <ClCompile Include="digita-signature\group-ds\group-ds-crypto.cpp" />
-    <ClCompile Include="digita-signature\group-ds\group-ds-node.cpp" />
+    <ClCompile Include="digital-signature\group-ds\group-ds-net.cpp" />
+    <ClCompile Include="digital-signature\group-ds\group-ds-crypto.cpp" />
+    <ClCompile Include="digital-signature\group-ds\group-ds-node.cpp" />
     <ClCompile Include="hash-functions\hash-functions.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -254,10 +254,10 @@
     <ClInclude Include="cipher-systems\FIAT_SHAMIR\fiat-shamir.h" />
     <ClInclude Include="cipher-systems\RABIN\rabin.h" />
     <ClInclude Include="cipher-systems\RSA\RSA.h" />
-    <ClInclude Include="digita-signature\ds\ds-client\dsi-client.hpp" />
-    <ClInclude Include="digita-signature\ds\ds-server\dsi-server.hpp" />
-    <ClInclude Include="digita-signature\group-ds\group-ds-node.hpp" />
-    <ClInclude Include="digita-signature\group-ds\group-ds-tsa-server.hpp" />
+    <ClInclude Include="digital-signature\ds\ds-client\dsi-client.hpp" />
+    <ClInclude Include="digital-signature\ds\ds-server\dsi-server.hpp" />
+    <ClInclude Include="digital-signature\group-ds\group-ds-node.hpp" />
+    <ClInclude Include="digital-signature\group-ds\group-ds-tsa-server.hpp" />
     <ClInclude Include="hash-functions\hash-functions.h" />
   </ItemGroup>
   <ItemGroup>
@@ -283,22 +283,22 @@
     <Content Include="cipher-systems\RSA\plaintext.txt" />
     <Content Include="cipher-systems\RSA\private.key" />
     <Content Include="cipher-systems\RSA\public.key" />
-    <Content Include="digita-signature\ds\ds-client\keys\private.key" />
-    <Content Include="digita-signature\ds\ds-client\keys\public.key" />
-    <Content Include="digita-signature\ds\ds-client\keys\server-public.key" />
-    <Content Include="digita-signature\ds\ds-client\request.json" />
-    <Content Include="digita-signature\ds\ds-client\response.json" />
-    <Content Include="digita-signature\ds\ds-server\answer.json" />
-    <Content Include="digita-signature\ds\ds-server\keys\client-public.key" />
-    <Content Include="digita-signature\ds\ds-server\keys\private.key" />
-    <Content Include="digita-signature\ds\ds-server\keys\public.key" />
-    <Content Include="digita-signature\group-ds\temp\group-ds-lead\leader.key" />
-    <Content Include="digita-signature\group-ds\temp\group-ds-lead\signature.json" />
-    <Content Include="digita-signature\group-ds\temp\group-ds-lead\tsa_public.key" />
-    <Content Include="digita-signature\group-ds\temp\group-ds-mem\member8000.key" />
-    <Content Include="digita-signature\group-ds\temp\group-ds-mem\member8001.key" />
-    <Content Include="digita-signature\group-ds\temp\group-ds-tsa\private.key" />
-    <Content Include="digita-signature\group-ds\temp\group-ds-tsa\public.key" />
+    <Content Include="digital-signature\ds\ds-client\keys\private.key" />
+    <Content Include="digital-signature\ds\ds-client\keys\public.key" />
+    <Content Include="digital-signature\ds\ds-client\keys\server-public.key" />
+    <Content Include="digital-signature\ds\ds-client\request.json" />
+    <Content Include="digital-signature\ds\ds-client\response.json" />
+    <Content Include="digital-signature\ds\ds-server\answer.json" />
+    <Content Include="digital-signature\ds\ds-server\keys\client-public.key" />
+    <Content Include="digital-signature\ds\ds-server\keys\private.key" />
+    <Content Include="digital-signature\ds\ds-server\keys\public.key" />
+    <Content Include="digital-signature\group-ds\temp\group-ds-lead\leader.key" />
+    <Content Include="digital-signature\group-ds\temp\group-ds-lead\signature.json" />
+    <Content Include="digital-signature\group-ds\temp\group-ds-lead\tsa_public.key" />
+    <Content Include="digital-signature\group-ds\temp\group-ds-mem\member8000.key" />
+    <Content Include="digital-signature\group-ds\temp\group-ds-mem\member8001.key" />
+    <Content Include="digital-signature\group-ds\temp\group-ds-tsa\private.key" />
+    <Content Include="digital-signature\group-ds\temp\group-ds-tsa\public.key" />
     <Content Include="README.md" />
     <Content Include="tests.txt" />
   </ItemGroup>
