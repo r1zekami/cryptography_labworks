@@ -7,12 +7,12 @@
 #include "cipher-systems/RABIN/rabin.h"
 #include "cipher-systems/RSA/RSA.h"
 #include "hash-functions/hash-functions.h"
-#include "digital-signature/ds/ds-client/dsi-client.hpp"
-#include "digital-signature/group-ds/group-ds-node.hpp"
-#include "digital-signature/ds/ds-server/dsi-server.hpp"
+#include "digita-signature/ds/ds-client/dsi-client.hpp"
+#include "digita-signature/group-ds/group-ds-node.hpp"
+#include "digita-signature/ds/ds-server/dsi-server.hpp"
 #include "cipher-systems/FIAT_SHAMIR/fiat-shamir.h"
 #include "cipher-systems/AES/AES.hpp"
-#include "digital-signature/group-ds/group-ds-tsa-server.hpp"
+#include "digita-signature/group-ds/group-ds-tsa-server.hpp"
 
 bool is_tsa_server() {
     const std::string lock_file = "tsa_server.lock";
