@@ -5,7 +5,7 @@
 #include <boost/property_tree/json_parser.hpp>
 #include <fstream>
 
-#include "../../CIPHER_SYSTEMS/RSA/RSA.h"
+#include "../../cipher-systems/RSA/RSA.h"
 
 void GDSNode::Run() {
     SelectPort();

@@ -8,8 +8,8 @@
 #include <sstream>
 #include <random>
 #include <boost/date_time/posix_time/time_formatters.hpp>
-#include "../CIPHER_SYSTEMS/AES/AES.hpp"
-#include "../CIPHER_SYSTEMS/RSA/RSA.h"
+#include "../cipher-systems/AES/AES.hpp"
+#include "../cipher-systems/RSA/RSA.h"
 #include "../hash-functions/hash-functions.h"
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/json_parser.hpp>

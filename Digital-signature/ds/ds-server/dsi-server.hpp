@@ -8,9 +8,9 @@
 #include <boost/date_time/time_facet.hpp>
 
 #include "../../../hash-functions/hash-functions.h"
-#include "../../../CIPHER_SYSTEMS/RSA/RSA.h"
-#include "../../../CIPHER_SYSTEMS/ELGAMAL/elgamal.h"
-#include "../../../CIPHER_SYSTEMS/FIAT_SHAMIR/fiat-shamir.h"
+#include "../../../cipher-systems/RSA/RSA.h"
+#include "../../../cipher-systems/ELGAMAL/elgamal.h"
+#include "../../../cipher-systems/FIAT_SHAMIR/fiat-shamir.h"
 
 class DSServer {
 public:

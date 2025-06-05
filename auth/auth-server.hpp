@@ -7,7 +7,7 @@
 #include <string>
 #include <sstream>
 #include <random>
-#include "../CIPHER_SYSTEMS/AES/AES.hpp"
+#include "../cipher-systems/AES/AES.hpp"
 #include "auth-client.hpp"
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/json_parser.hpp>

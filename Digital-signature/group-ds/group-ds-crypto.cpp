@@ -1,5 +1,5 @@
 #include "group-ds-node.hpp"
-#include "../../CIPHER_SYSTEMS/ELGAMAL/elgamal.h"
+#include "../../cipher-systems/ELGAMAL/elgamal.h"
 
 
 std::map<std::string, cpp_int> GDSNode::GDSCrypto::GenerateMemberKeys(cpp_int alpha, cpp_int p, cpp_int q)

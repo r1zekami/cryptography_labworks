@@ -234,11 +234,11 @@
       <SDLCheck>true</SDLCheck>
       <LinkCompiled>true</LinkCompiled>
     </ClCompile>
-    <ClCompile Include="CIPHER_SYSTEMS\AES\AES.cpp" />
-    <ClCompile Include="CIPHER_SYSTEMS\ELGAMAL\elgamal.cpp" />
-    <ClCompile Include="CIPHER_SYSTEMS\FIAT_SHAMIR\fiat-shamir.cpp" />
-    <ClCompile Include="CIPHER_SYSTEMS\RABIN\rabin.cpp" />
-    <ClCompile Include="CIPHER_SYSTEMS\RSA\RSA.cpp" />
+    <ClCompile Include="cipher-systems\AES\AES.cpp" />
+    <ClCompile Include="cipher-systems\ELGAMAL\elgamal.cpp" />
+    <ClCompile Include="cipher-systems\FIAT_SHAMIR\fiat-shamir.cpp" />
+    <ClCompile Include="cipher-systems\RABIN\rabin.cpp" />
+    <ClCompile Include="cipher-systems\RSA\RSA.cpp" />
     <ClCompile Include="cryptography.cpp" />
     <ClCompile Include="alghoritms.cpp" />
     <ClCompile Include="digital-signature\group-ds\group-ds-net.cpp" />
@@ -249,11 +249,11 @@
   <ItemGroup>
     <ClInclude Include="alghoritms.h" />
     <ClInclude Include="auth\auth-client.hpp" />
-    <ClInclude Include="CIPHER_SYSTEMS\AES\AES.hpp" />
-    <ClInclude Include="CIPHER_SYSTEMS\ELGAMAL\elgamal.h" />
-    <ClInclude Include="CIPHER_SYSTEMS\FIAT_SHAMIR\fiat-shamir.h" />
-    <ClInclude Include="CIPHER_SYSTEMS\RABIN\rabin.h" />
-    <ClInclude Include="CIPHER_SYSTEMS\RSA\RSA.h" />
+    <ClInclude Include="cipher-systems\AES\AES.hpp" />
+    <ClInclude Include="cipher-systems\ELGAMAL\elgamal.h" />
+    <ClInclude Include="cipher-systems\FIAT_SHAMIR\fiat-shamir.h" />
+    <ClInclude Include="cipher-systems\RABIN\rabin.h" />
+    <ClInclude Include="cipher-systems\RSA\RSA.h" />
     <ClInclude Include="digital-signature\ds\ds-client\dsi-client.hpp" />
     <ClInclude Include="digital-signature\ds\ds-server\dsi-server.hpp" />
     <ClInclude Include="digital-signature\group-ds\group-ds-node.hpp" />
@@ -266,23 +266,23 @@
     <Content Include="auth\temp\encrypted.txt" />
     <Content Include="auth\temp\passwords.json" />
     <Content Include="auth\temp\plaintext.txt" />
-    <Content Include="CIPHER_SYSTEMS\ELGAMAL\ciphertext.txt" />
-    <Content Include="CIPHER_SYSTEMS\ELGAMAL\decrypted.txt" />
-    <Content Include="CIPHER_SYSTEMS\ELGAMAL\plaintext.txt" />
-    <Content Include="CIPHER_SYSTEMS\ELGAMAL\private.key" />
-    <Content Include="CIPHER_SYSTEMS\ELGAMAL\public.key" />
-    <Content Include="CIPHER_SYSTEMS\FIAT_SHAMIR\private.key" />
-    <Content Include="CIPHER_SYSTEMS\FIAT_SHAMIR\public.key" />
-    <Content Include="CIPHER_SYSTEMS\RABIN\ciphertext.txt" />
-    <Content Include="CIPHER_SYSTEMS\RABIN\decrypted.txt" />
-    <Content Include="CIPHER_SYSTEMS\RABIN\plaintext.txt" />
-    <Content Include="CIPHER_SYSTEMS\RABIN\private.key" />
-    <Content Include="CIPHER_SYSTEMS\RABIN\public.key" />
-    <Content Include="CIPHER_SYSTEMS\RSA\ciphertext.txt" />
-    <Content Include="CIPHER_SYSTEMS\RSA\decrypted.txt" />
-    <Content Include="CIPHER_SYSTEMS\RSA\plaintext.txt" />
-    <Content Include="CIPHER_SYSTEMS\RSA\private.key" />
-    <Content Include="CIPHER_SYSTEMS\RSA\public.key" />
+    <Content Include="cipher-systems\ELGAMAL\ciphertext.txt" />
+    <Content Include="cipher-systems\ELGAMAL\decrypted.txt" />
+    <Content Include="cipher-systems\ELGAMAL\plaintext.txt" />
+    <Content Include="cipher-systems\ELGAMAL\private.key" />
+    <Content Include="cipher-systems\ELGAMAL\public.key" />
+    <Content Include="cipher-systems\FIAT_SHAMIR\private.key" />
+    <Content Include="cipher-systems\FIAT_SHAMIR\public.key" />
+    <Content Include="cipher-systems\RABIN\ciphertext.txt" />
+    <Content Include="cipher-systems\RABIN\decrypted.txt" />
+    <Content Include="cipher-systems\RABIN\plaintext.txt" />
+    <Content Include="cipher-systems\RABIN\private.key" />
+    <Content Include="cipher-systems\RABIN\public.key" />
+    <Content Include="cipher-systems\RSA\ciphertext.txt" />
+    <Content Include="cipher-systems\RSA\decrypted.txt" />
+    <Content Include="cipher-systems\RSA\plaintext.txt" />
+    <Content Include="cipher-systems\RSA\private.key" />
+    <Content Include="cipher-systems\RSA\public.key" />
     <Content Include="digital-signature\ds\ds-client\keys\private.key" />
     <Content Include="digital-signature\ds\ds-client\keys\public.key" />
     <Content Include="digital-signature\ds\ds-client\keys\server-public.key" />
