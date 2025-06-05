@@ -1,0 +1,30 @@
+{
+    "CMSVersion": "1",
+    "DigestAlgorithmIdentifiers": "SHA512",
+    "EncapsulatedContentInfo": {
+        "ContentType": "Data",
+        "OCTET_STRING_OPTIONAL": "Helloworld"
+    },
+    "SignerInfos": {
+        "CMSVersion": "1",
+        "SignerIdentifier": "GroupLeader",
+        "DigestAlgorithmIdentifiers": "SHA512",
+        "SignatureAlgorithmIdentifier": "GroupDS",
+        "SignatureValue": {
+            "U": "a102d58b94d9251b6b1bd5dd426d67980e8bd8fb8dd26e82379caeaa7af3c77c57cfc2e747049a15775703400e9d1640d57ccf2a73efe1ea7a7157852ce0f00",
+            "E": "3614e3c8e9eba6a7cf0890613d22686b0b836ece3a8400c9ae5b62bf659719c754b93911ab1b1969f0bdcac7806fdc769dcd0fbd8325684f1b7ab8f73a819420",
+            "S": "1abd6420e05f7488619530259778409ec26e342df40c358d8469113b7b76e72e4e7c7c5a31c9cb2cf1bc21c17825c4361809971ae24b83f586eb01ad94310e00"
+        },
+        "UnsignedAttributes": {
+            "ObjectIdentifier": "signature-time-stamp",
+            "SET_OF_AttributeValue": {
+                "Timestamp": "20250605T020656",
+                "TSASignature": "0xe0cfcac0f7b0f72bc221bc89ed18f59c1bd3613b3bb7f5b88397d58a961b016f572985ddba8a50e9fd988a1c42243e7216b577dc71b263944ee660c6eeac2df6d4e8a18789f73302251adc",
+                "TSAPublicKey": {
+                    "e": "10001",
+                    "n": "16bdfa9949378e3705f75a9cffbda937e5e5e98ed3ade0c417f847f718ffe31aac88cef2fcfd9f8debfb63a0b955d509af396adc51b7969aaeb58b980190e7855857263229be66fc392ea67"
+                }
+            }
+        }
+    }
+}

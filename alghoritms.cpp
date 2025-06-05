@@ -17,9 +17,22 @@ bi fast_exp(bi base, bi exponent) {
 
 
 bi fast_exp_mod(bi base, bi exponent, bi modulus) {
-    bi result = 1;
-    base = base % modulus;
+    if (modulus <= 0) {
+        throw std::invalid_argument("Modulus must be positive");
+    }
+    base = (base % modulus + modulus) % modulus;
 
+    if (exponent < 0) {
+        bi inv = mod_inverse(base, modulus);
+        if (inv == -1) {
+            std::cout << "[algorithms.cpp/fast_exp_mod] [ERR] Inverse does not exist\n";
+            throw std::runtime_error("Inverse does not exist");
+        }
+        base = inv;
+        exponent = -exponent;
+    }
+
+    bi result = 1;
     while (exponent > 0) {
         if (exponent & 1) {
             result = (result * base) % modulus;
@@ -228,6 +241,31 @@ bi generate_prime(uint64_t k) {
 }
 
 
+bi generate_prime_in_range(cpp_int from, cpp_int to) {
+    if (from > to) std::swap(from, to);
+    boost::random::mt19937 gen(std::random_device{}());
+    boost::random::uniform_int_distribution<bi> dist(from, to);
+    bi p(0);
+    while (true) {
+        p = dist(gen);
+        p |= 0x1;
+
+        if (p == 2) return 2;
+        
+        if (p % 3 == 0 || p % 5 == 0 || p % 7 == 0) {
+            if (p == 3 or p == 5 or p == 7) return true;
+        }
+        
+        if (miller_rabin_test(p))
+        {
+            //std::cout << msb(p) << std::endl;
+            return p;
+        }
+    }
+}
+
+
+
 std::vector<bi> solve_1d_congruence(bi a, bi b, bi p) {
     std::vector<bi> solutions;
 
@@ -352,6 +390,9 @@ void printPolynomial(const std::vector<bi>& poly) {
     printf("\n");
 }
 
+cpp_int mod_inverse(cpp_int a, cpp_int m) {
+    return std::get<1>(extended_euclidean_alg(a, m));
+}
 
 std::vector<bi> galois_field::reduction(const std::vector<bi>& poly) {
     if (poly.size() < irreducible.size()) {
@@ -633,6 +674,13 @@ void pollard_method_file_tests(std::string filename)
     }
 }
 
+std::string to_hex(cpp_int num) 
+{
+    std::stringstream ss;
+    ss << std::hex << num;
+    return ss.str();
+}
+
 
 //  Padding & Blocks logic for cipher-systems --------------------------------------------------------------------------
 
@@ -743,6 +791,8 @@ std::map<std::string, bi> ReadKey(const std::string& KeyFile) {
     return Key;
 }
 
+
+
 //
 //----------------------------------------------------------------------------------------------------------------------
 //------------------------------------------------utilities-------------------------------------------------------------
@@ -810,3 +860,20 @@ std::vector<uint8_t> hexStringToBytes(const std::string& hex) {
     }
     return bytes;
 }
+
+
+std::vector<uint8_t> stringToBytes(std::string data)
+{
+    return std::vector<uint8_t>(data.begin(), data.end());
+}
+
+
+std::string BytesToHexString(const std::vector<uint8_t>& bytes) {
+    std::stringstream ss;
+    ss << "0x";
+    for (const auto& byte : bytes) {
+        ss << std::hex << std::setw(2) << std::setfill('0') << (int)byte;
+    }
+    return ss.str();
+}
+

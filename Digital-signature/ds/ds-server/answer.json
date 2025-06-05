@@ -1,0 +1,30 @@
+{
+    "CMSVersion": "1",
+    "DigestAlgorithmIdentifiers": "SHA512",
+    "EncapsulatedContentInfo": {
+        "ContentType": "Data",
+        "OCTET_STRING_OPTIONAL": "MessageToSign"
+    },
+    "SignerInfos": {
+        "CMSVersion": "1",
+        "SignerIdentifier": "MikhailNosov",
+        "DigestAlgorithmIdentifiers": "SHA512",
+        "SignatureAlgorithmIdentifier": "RSA",
+        "SignatureValue": "0x28bd8067f796f47ce24affd9be1f62902bebbb48fcb6412c08c766d5ec08ee254b5e2e146b1c1f86683f0db52f7f1a63029bf90aa22fe4cdf494ad7b745ccbf62",
+        "SubjectPublicKeyInfo": {
+            "e": "0x10001",
+            "n": "0x2a3b999fbb47b5a9675bc1f2ca8f62ded08b3c0e077a1e18b8125f5570ff3337447fa8e243d5131061d9e9ae8b7a35625ffceb7d621b474d3f72455cc5f9ec1a1"
+        },
+        "UnsignedAttributes": {
+            "ObjectIdentifier": "signature-time-stamp",
+            "SET_OF_AttributeValue": {
+                "Timestamp": "2025-05-18T07:20:25",
+                "ServerSignature": "0x307e83adb8f738fd0245a57fc7286b8f8226a02a68b398bd56929f1915a5bb99a19181f0d523749d0795346023d79b908095035086992ba460fe7661684ee7e42",
+                "ServerPublicKeyInfo": {
+                    "e": "0x10001",
+                    "n": "0x318cbf6607f91d1b668f247a8d06946989cbae7c68691739e15c11e9e9a9baba3521cb0581d58a802aefdcf1c54abe70b7417d0a2839e044af0bf3e202bab8a3d"
+                }
+            }
+        }
+    }
+}

@@ -1,16 +1,40 @@
 #include <filesystem>
 
 #include "alghoritms.h"
-#include "Elgamal/Elgamal.h"
-#include "Rabin/Rabin.h"
-#include "RSA/RSA.h"
-#include "Hash-functions/hash-functions.h"
-#include "Digital-signature/Client/client.hpp"
-#include "Digital-signature/Server/server.hpp"
+#include "auth/auth-client.hpp"
+#include "auth/auth-server.hpp"
+#include "CIPHER_SYSTEMS/ELGAMAL/elgamal.h"
+#include "CIPHER_SYSTEMS/RABIN/rabin.h"
+#include "CIPHER_SYSTEMS/RSA/RSA.h"
+#include "hash-functions/hash-functions.h"
+#include "digital-signature/ds/ds-client/dsi-client.hpp"
+#include "digital-signature/group-ds/group-ds-node.hpp"
+#include "digital-signature/ds/ds-server/dsi-server.hpp"
+#include "CIPHER_SYSTEMS/FIAT_SHAMIR/fiat-shamir.h"
+#include "CIPHER_SYSTEMS/AES/AES.hpp"
+#include "digital-signature/group-ds/group-ds-tsa-server.hpp"
+
+bool is_tsa_server() {
+    const std::string lock_file = "tsa_server.lock";
+    std::ifstream lock_check(lock_file);
+    
+    if (lock_check.good()) {
+        lock_check.close();
+        return false;
+    }
+    lock_check.close();
+
+    std::ofstream lock_create(lock_file);
+    if (lock_create.is_open()) {
+        lock_create << "TSA server running\n";
+        lock_create.close();
+        return true;
+    }
+    
+    return false;
+}
 
 int main() {
-
-
     // std::cout << base64::encode("Helloworld!") << std::endl;
     // std::cout << base64::encode("Helloworld!!") << std::endl;
     // std::cout << base64::encode("Helloworld!!!") << std::endl;
@@ -45,6 +69,8 @@ int main() {
     // {
     //     printf("\\0x%x", result[i]);
     // }
+
+    //std::cout << STREEBOG::hash512("Hello world!!!!");
     
     
     // std::vector<uint8_t> bytes1 = {0x12, 0x23, 0x45, 0x67, 0x89, 0xAB, 0xCD, 0x12, 0x23, 0x45, 0x67, 0x89, 0xAB, 0xCD, 0xAB, 0xAB};
@@ -68,25 +94,92 @@ int main() {
     // std::cout << "HMAC CHEF STRBG 256:" << HMAC::hashMessage<STREEBOG256CHEF>("Hello World!!!", "1123sd") << "\n\n";
     // std::cout << "HMAC CHEF STRBG 512:" << HMAC::hashMessage<STREEBOG512CHEF>("Hello World!!!", "1123sd") << "\n\n";
 
-    // Client<RSA, SHA512> Client("127.0.0.1", "8888", "MessageToSign");
-    // Client.Run();
+    //FIAT_SHAMIR::GenerateKeys("Fiat-Shamir/public.key", "Fiat-Shamir/private.key", SHA256::GetOutputHashSize());
+    // std::string SignedContent = FIAT_SHAMIR::DigitalSigEncrypt("Message", "Fiat-Shamir/private.key", SHA256::hashMessage);
+    // std::cout << SignedContent << std::endl;
+    // std::cout << FIAT_SHAMIR::DigitalSigValidate("Message", SignedContent, SHA256::hashMessage, "Fiat-Shamir/public.key");
+    //FIAT_SHAMIR::GetPublicKeyNode("Fiat-Shamir/public.key");
+    
+    
+    // std::vector<uint8_t> plain = { 'h', 'e', 'l', 'l', 'o', 'h', 'e', 'l', 'l', 'o', 'h', 'e', 'l', 'l', 'o', '!'}; //plaintext example
+    // std::vector<uint8_t> key = { 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f }; //key example
+    //
+    //
+    // std::string plaintext_aes = "Hello World!1234512341234124Hello World!1234512341234124";
+    // AES aes(AESKeyLength::AES_128);
+    // auto iv = AES::GenerateIV();
+    // printf("{");
+    // for (int i = 0; i < iv.size(); i++)
+    // {
+    //     printf("0x%x, ", iv[i]);
+    // }
+    // printf("} \n");
+    // //{0xce, 0xe4, 0xc4, 0x16, 0xc0, 0x10, 0x92, 0xa6, 0xb2, 0x9c, 0xa4, 0x50, 0x70, 0xc, 0x5d, 0x86};
+    // auto c = aes.EncryptCBC(stringToBytes(plaintext_aes), key, iv);
+    // std::cout << std::string(c.begin(), c.end()) << std::endl;
+    //
+    // auto d = aes.DecryptCBC(c, key, iv);
+    // std::cout << std::string(d.begin(), d.end()) << std::endl;
 
-    // Server server("127.0.0.1", "8889");
-    // server.Run();
+
+    // AuthClient Alice;
+    // Alice.Run();
+    //
+    // "REQUEST_AUTH:0xabc655123bbcab3843bca8123bca7124bca71234bca73142" 
+    //     ->
+    //         "REQUEST_AUTH:{ALICE_TIMESTAMP:Alice:ALICE_DATA}"
+    //
+    // "RESPONSE_AUTH:0xaadsf2345bca8123bca72345bc432353frstgweqerqr2"
+    //     ->
+    //         "RESPONSE_AUTH:{ALICE_TIMESTAMP:Bob:BOB_DATA}"
+    //
+    //
+    
+    
+    /*
+    
     int res = 0;
     std::cin >> res;
-    
-    if (res == 0)
-    {
-        Server server("127.0.0.1", "8888");
-        server.Run();
+    if (res == 0) {
+        // DSClient<RSA, SHA256> DSClient("127.0.0.1", "8888", "MessageToSign");
+        // DSClient.Run();
+        
+        AuthServer AuthServer("Bob", Proto::SingleUsePasswords);
+        AuthServer.Run();
     } else
     {
-        Client<ELGAMAL, SHA512> Client("127.0.0.1", "8888", "MessageToSign");
-        Client.Run();
+        // DSServer DSServer("127.0.0.1", "8888");
+        // DSServer.Run();
+        
+        AuthClient AuthClient("Alice", Proto::SingleUsePasswords);
+        AuthClient.Run();
     }
+    std::cin.get();
+
+    //*/
+
 
     
+    // AuthServer Bob;
+    // Bob.Run();
+
+    //std::cout << mod_inverse(4, 7);
+
+    //std::cout << fast_exp_mod(2, 3, 5);
+    
+    //GDSNode::GDSCrypto::GenerateAndSaveLeaderKeys();
+    
+    if (is_tsa_server()) {
+     std::cout << "[Main] Starting as TSA server on port 7999\n";
+     GDSServer server;
+     server.Run();
+    } else {
+     std::cout << "[Main] TSA server already running, starting as GDS node\n";
+     GDSNode node;
+     node.Run();
+    }
+    
+    // return 0;
     std::cin.get();
     
     return 0;

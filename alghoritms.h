@@ -1,5 +1,7 @@
 #pragma once
 
+#include <boost/property_tree/json_parser.hpp>
+#include <boost/property_tree/ptree.hpp>
 #include <boost/multiprecision/cpp_dec_float.hpp>
 #include <boost/multiprecision/cpp_int.hpp>
 #include <boost/random.hpp>
@@ -11,6 +13,7 @@
 #include <fstream>
 #include <map>
 #include <bitset>
+#include <boost/algorithm/string.hpp>
 
 using namespace boost::multiprecision;
 
@@ -54,6 +57,7 @@ bool solovay_strassen_test(bi n);
 bool miller_rabin_test(bi n);
 std::string ferma(const bi& number);
 bi generate_prime(uint64_t k);
+bi generate_prime_in_range(cpp_int from, cpp_int to);
 std::vector<bi> solve_1d_congruence(bi a, bi b, bi p);
 std::tuple<bi, bi> solve_2d_congruence(bi a, bi p);
 bi solve_1d_congruence_system(const std::vector<bi>& remainders, const std::vector<bi>& moduli);
@@ -65,8 +69,8 @@ std::vector<bi>  pollard_p_method(bi p, bi a, bi b);
 bi find_r(bi a, bi p);
 std::vector<std::tuple<bi, bi, bi>> file_read(const std::string& filename);
 void pollard_method_file_tests(std::string filename);
-
-
+std::string to_hex(cpp_int num);
+cpp_int mod_inverse(cpp_int a, cpp_int m);
 
 
 std::vector<uint8_t> PKCS7_Padding(const std::vector<uint8_t>& data, size_t block_size);
@@ -76,6 +80,15 @@ std::vector<bi> ChunkMessage(const std::vector<uint8_t>& bytes, size_t block_siz
 std::vector<uint8_t> UnchunkMessage(const std::vector<bi>& chunks, size_t block_size);
 std::map<std::string, bi> ReadKey(const std::string& KeyFile);
 
+// Utility function to convert string to hex
+inline std::string stringToHex(const std::string& input) {
+    std::ostringstream oss;
+    oss << std::hex << std::setfill('0');
+    for (unsigned char c : input) {
+        oss << std::setw(2) << static_cast<int>(c);
+    }
+    return oss.str();
+}
 
 
 std::vector<uint8_t> TextToBytes(const std::string& text);
@@ -158,3 +171,6 @@ std::string toHexString(uint512_t number);
 
 std::vector<uint8_t> hexStringToBytes(const std::string& hex);
 
+std::vector<uint8_t> stringToBytes(std::string data);
+
+std::string BytesToHexString(const std::vector<uint8_t>& bytes);

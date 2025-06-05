@@ -1,0 +1,8 @@
+ENCMessage {
+    Version:    0
+    ContentType:    Text
+    ContentEncryptionAlgorithmIdentifier:    rsaEncryption
+    encryptedContent:
+0x18d089cb900ffb14239bf20c57d38c9a088929ebb0ec0ab42f38805e6c8ca399f5ac6f25597db3c1f5a5d7c8e8c979865b334a1cbb732f6c60a7039bb67dbd38a
+
+}
