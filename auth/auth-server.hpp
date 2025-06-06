@@ -26,7 +26,7 @@ public:
 
     void Run() {
         while (true) {
-            std::cout << "[AuthServer] Start listening at 127.0.0.1:8888...\n";
+            //std::cout << "[AuthServer] Start listening at 127.0.0.1:8888...\n";
             HandleClientRequest();
         }
     }
@@ -37,6 +37,10 @@ public:
     void SingleUsePasswordSequence();
     void FiatShamirSequence();
     void KeyExchangeSequence();
+    void DiffieHellmanSequence();
+    void SPEKE_Sequence();
+    void BlomSequence(); //Use with TSA only (auth-tsa-server.hpp)
+    
     
     void HandleClientRequest()
     {
@@ -52,12 +56,21 @@ public:
         else if (Proto == Proto::SingleUsePasswords) {
             SingleUsePasswordSequence();
         }
-        else if (Proto == Proto::FiatShamir)
-        {
+        else if (Proto == Proto::FiatShamir){
             FiatShamirSequence();
-        } else if (Proto == Proto::KeyExchange)
-        {
+        }
+        else if (Proto == Proto::KeyExchange){
             KeyExchangeSequence();
+        }
+        else if (Proto == Proto::DiffieHellmanKeyExchange){
+            DiffieHellmanSequence();
+        }
+        else if (Proto == Proto::SPEKE) {
+            SPEKE_Sequence();
+        }
+        else if (Proto == Proto::BlomKeyExchange)
+        {
+            BlomSequence();
         }
     }
 

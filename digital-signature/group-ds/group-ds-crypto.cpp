@@ -95,8 +95,8 @@ std::map<std::string, cpp_int> GDSNode::GDSCrypto::GenerateLeaderKeys()
     cpp_int n = p1*p2;
 
     cpp_int phi = (p1 - 1) * (p2 - 1);
-    bi e = 65537; //overwrite (stable)
-    bi d = std::get<1>(extended_euclidean_alg(e, phi));
+    cpp_int e = 65537; //overwrite (stable)
+    cpp_int d = std::get<1>(extended_euclidean_alg(e, phi));
     if (d <= 0) d+= phi;
     if ((e * d) % phi != 1) {
         std::cout << "Invalid private key: (e * d) % phi != 1\n";

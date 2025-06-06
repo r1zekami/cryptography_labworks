@@ -1,8 +1,8 @@
 #include "alghoritms.h"
 
 
-bi fast_exp(bi base, bi exponent) {
-    bi result = 1;
+cpp_int fast_exp(cpp_int base, cpp_int exponent) {
+    cpp_int result = 1;
 
     while (exponent > 0) {
         if (exponent & 1) {
@@ -15,15 +15,15 @@ bi fast_exp(bi base, bi exponent) {
     return result;
 }
 
-
-bi fast_exp_mod(bi base, bi exponent, bi modulus) {
+// This function kinda behave as python pow(a, b, p) 
+cpp_int fast_exp_mod(cpp_int base, cpp_int exponent, cpp_int modulus) {
     if (modulus <= 0) {
         throw std::invalid_argument("Modulus must be positive");
     }
     base = (base % modulus + modulus) % modulus;
 
     if (exponent < 0) {
-        bi inv = mod_inverse(base, modulus);
+        cpp_int inv = mod_inverse(base, modulus);
         if (inv == -1) {
             std::cout << "[algorithms.cpp/fast_exp_mod] [ERR] Inverse does not exist\n";
             throw std::runtime_error("Inverse does not exist");
@@ -32,7 +32,7 @@ bi fast_exp_mod(bi base, bi exponent, bi modulus) {
         exponent = -exponent;
     }
 
-    bi result = 1;
+    cpp_int result = 1;
     while (exponent > 0) {
         if (exponent & 1) {
             result = (result * base) % modulus;
@@ -44,15 +44,15 @@ bi fast_exp_mod(bi base, bi exponent, bi modulus) {
 }
 
 
-std::tuple<bi, bi, bi> extended_euclidean_alg(bi x, bi y) {
+std::tuple<cpp_int, cpp_int, cpp_int> extended_euclidean_alg(cpp_int x, cpp_int y) {
 
     // x < 0 ? x*=(-1) : x;
     // y < 0 ? y*=(-1) : y;
 
-    bi old_x{x}, old_y{y};
-    bi a1{0}, b1{1};
-    bi a2{1}, b2{0};
-    bi q, r, a, b;
+    cpp_int old_x{x}, old_y{y};
+    cpp_int a1{0}, b1{1};
+    cpp_int a2{1}, b2{0};
+    cpp_int q, r, a, b;
     
     while (y != 0) {
         q = x / y;
@@ -74,20 +74,20 @@ std::tuple<bi, bi, bi> extended_euclidean_alg(bi x, bi y) {
 
 
 
-bi jacobi(bi a, bi p)
+cpp_int jacobi(cpp_int a, cpp_int p)
 {
     if (p <= 0 || p % 2 == 0) {
         printf("Error: p должно быть положительным нечетным числом");
         return -10;
     }
-    bi result{1};
+    cpp_int result{1};
 
     if (a == 0) { return 0; }   // 0 = 0 mod p
     if (a == 1) { return result; }  // 1^2 = 1 mod p
 
     
-    bi k = 0; 
-    bi b = a;
+    cpp_int k = 0; 
+    cpp_int b = a;
 
     while (b % 2 == 0)
     {
@@ -96,7 +96,7 @@ bi jacobi(bi a, bi p)
     }
     // a = b * 2^k
     
-    bi sign = 1;
+    cpp_int sign = 1;
     if (k % 2 != 0)
     {
         if (p % 8 == 1 || p % 8 == 7) {
@@ -121,13 +121,13 @@ bi jacobi(bi a, bi p)
 
 
 //uniform int distribuiton
-bool fermat_test(bi n) {
+bool fermat_test(cpp_int n) {
     if (n < 2) return false;
     if (n == 2 || n == 3) return true;
     if (n % 2 == 0) return false;
 
     boost::random::mt19937 gen(std::random_device{}());
-    boost::random::uniform_int_distribution<bi> dist(2, n - 2);
+    boost::random::uniform_int_distribution<cpp_int> dist(2, n - 2);
 
     for (int i = 0; i <= 5; i++) {
         if (fast_exp_mod(dist(gen), n-1, n) != 1) {
@@ -138,14 +138,14 @@ bool fermat_test(bi n) {
 }
 
 
-std::string ferma(const bi& number) {
+std::string ferma(const cpp_int& number) {
     bool isPrime = fermat_test(number);
     return isPrime ? "Number " + number.str() + " is probably prime" 
                    : "Number " + number.str() + " is composite";
 }
 
 
-bool solovay_strassen_test(bi n)
+bool solovay_strassen_test(cpp_int n)
 {
     if (n <= 1 or n == 4)
         return false;
@@ -156,17 +156,17 @@ bool solovay_strassen_test(bi n)
 
     for (int i = 0; i <= 5; i++)
     {
-        boost::random::uniform_int_distribution<bi> dist(2, n - 2);
+        boost::random::uniform_int_distribution<cpp_int> dist(2, n - 2);
 
-        bi a = dist(gen);
-        bi r = fast_exp_mod(a, (n - 1) / 2, n);
+        cpp_int a = dist(gen);
+        cpp_int r = fast_exp_mod(a, (n - 1) / 2, n);
 
         if (r != 1 and r != n-1)
         {
             return false;
         }
 
-        bi s = jacobi(a, n);
+        cpp_int s = jacobi(a, n);
         if (s < 0) s += n; 
 
         if (r % n != s % n) {
@@ -178,14 +178,14 @@ bool solovay_strassen_test(bi n)
 
 
 
-bool miller_rabin_test(bi n)
+bool miller_rabin_test(cpp_int n)
 {
     if (n <= 1) return false;
     if (n <= 3) return true;
     if (n % 2 == 0) return false;
 
-    bi s = 0;
-    bi d = n - 1;
+    cpp_int s = 0;
+    cpp_int d = n - 1;
 
     while (d % 2 == 0) {
         d /= 2;
@@ -193,16 +193,16 @@ bool miller_rabin_test(bi n)
     }
 
     boost::random::mt19937 gen(std::random_device{}());
-    boost::random::uniform_int_distribution<bi> dist(2, n - 2);
+    boost::random::uniform_int_distribution<cpp_int> dist(2, n - 2);
 
     for (int i = 0; i < 20; ++i) {
-        bi a = dist(gen);
-        bi x = fast_exp_mod(a, d, n);
+        cpp_int a = dist(gen);
+        cpp_int x = fast_exp_mod(a, d, n);
 
         if (x == 1 || x == n - 1) continue;
 
         bool is_witness = false;
-        for (bi r = 1; r < s; ++r) {
+        for (cpp_int r = 1; r < s; ++r) {
             x = (x * x) % n;
             if (x == n - 1) {
                 is_witness = true;
@@ -216,12 +216,12 @@ bool miller_rabin_test(bi n)
 }
 
 
-bi generate_prime(uint64_t k) {
+cpp_int generate_prime(uint64_t k) {
     if (k <= 1) return 2;
     
     boost::random::mt19937 gen(std::random_device{}());
-    boost::random::uniform_int_distribution<bi> dist((fast_exp(2,k) - 1), fast_exp(2, k+1) - 1);
-    bi p(0);
+    boost::random::uniform_int_distribution<cpp_int> dist((fast_exp(2,k) - 1), fast_exp(2, k+1) - 1);
+    cpp_int p(0);
     while (true) {
         p = dist(gen);
         p |= 0x1;
@@ -241,11 +241,11 @@ bi generate_prime(uint64_t k) {
 }
 
 
-bi generate_prime_in_range(cpp_int from, cpp_int to) {
+cpp_int generate_prime_in_range(cpp_int from, cpp_int to) {
     if (from > to) std::swap(from, to);
     boost::random::mt19937 gen(std::random_device{}());
-    boost::random::uniform_int_distribution<bi> dist(from, to);
-    bi p(0);
+    boost::random::uniform_int_distribution<cpp_int> dist(from, to);
+    cpp_int p(0);
     while (true) {
         p = dist(gen);
         p |= 0x1;
@@ -266,8 +266,8 @@ bi generate_prime_in_range(cpp_int from, cpp_int to) {
 
 
 
-std::vector<bi> solve_1d_congruence(bi a, bi b, bi p) {
-    std::vector<bi> solutions;
+std::vector<cpp_int> solve_1d_congruence(cpp_int a, cpp_int b, cpp_int p) {
+    std::vector<cpp_int> solutions;
 
     auto [d, x, y] = extended_euclidean_alg(a, p);
 
@@ -276,11 +276,11 @@ std::vector<bi> solve_1d_congruence(bi a, bi b, bi p) {
         return solutions;
     }
 
-    bi b1 = b / d;
-    bi p1 = p / d;
-    bi x0 = ((x * b1) % p1 + p1) % p1;
+    cpp_int b1 = b / d;
+    cpp_int p1 = p / d;
+    cpp_int x0 = ((x * b1) % p1 + p1) % p1;
 
-    for (bi i = 0; i < d; ++i) {
+    for (cpp_int i = 0; i < d; ++i) {
         solutions.push_back((x0 + i * p1) % p);
     }
 
@@ -288,37 +288,37 @@ std::vector<bi> solve_1d_congruence(bi a, bi b, bi p) {
 }
 
 
-std::tuple<bi, bi> solve_2d_congruence(bi a, bi p) {
+std::tuple<cpp_int, cpp_int> solve_2d_congruence(cpp_int a, cpp_int p) {
     if (jacobi(a, p) != 1) {
         std::cout << "lejandr != 1, no solutions exist" << std::endl;
         return std::make_tuple(0, 0);
     }
 
     // Представляем p в виде p = 2^k * h + 1
-    bi k = 0;
-    bi h = p - 1;
+    cpp_int k = 0;
+    cpp_int h = p - 1;
     while (h % 2 == 0) {
         k++;
         h /= 2;
     }
 
-    bi a1 = fast_exp_mod(a, (h + 1) / 2, p);
-    bi a2 = fast_exp_mod(a, p - 2, p); // a^{-1} mod p
+    cpp_int a1 = fast_exp_mod(a, (h + 1) / 2, p);
+    cpp_int a2 = fast_exp_mod(a, p - 2, p); // a^{-1} mod p
 
-    bi N = 2;
+    cpp_int N = 2;
     while (jacobi(N, p) != -1) {
         N++;
     }
 
-    bi N1 = fast_exp_mod(N, h, p);
-    bi N2 = 1;
-    bi j = 0;
+    cpp_int N1 = fast_exp_mod(N, h, p);
+    cpp_int N2 = 1;
+    cpp_int j = 0;
 
-    for (bi i = 0; i < k - 1; ++i) {
-        bi b = (a1 * N2) % p;
-        bi c = (a2 * b * b) % p;
-        bi exponent = fast_exp(2, k - 2 - i);
-        bi d = fast_exp_mod(c, exponent, p);
+    for (cpp_int i = 0; i < k - 1; ++i) {
+        cpp_int b = (a1 * N2) % p;
+        cpp_int c = (a2 * b * b) % p;
+        cpp_int exponent = fast_exp(2, k - 2 - i);
+        cpp_int d = fast_exp_mod(c, exponent, p);
 
         if (d == 1) {
             j = 0;
@@ -329,30 +329,30 @@ std::tuple<bi, bi> solve_2d_congruence(bi a, bi p) {
         N2 = (N2 * fast_exp_mod(N1, fast_exp(2, j), p)) % p;
     }
 
-    bi x1 = (a1 * N2) % p;
-    bi x2 = p - x1;
+    cpp_int x1 = (a1 * N2) % p;
+    cpp_int x2 = p - x1;
     return std::make_tuple(x1, x2);
 }
 
 
-bi solve_1d_congruence_system(const std::vector<bi>& remainders, const std::vector<bi>& moduli)
+cpp_int solve_1d_congruence_system(const std::vector<cpp_int>& remainders, const std::vector<cpp_int>& moduli)
 {
     int n = remainders.size();
-    bi M = 1;
+    cpp_int M = 1;
     for (int i = 0; i < n; i++) {
         M *= moduli[i];
     }
 
-    bi result = 0;
+    cpp_int result = 0;
     for (int i = 0; i < n; i++) {
-        bi Mi = M / moduli[i];
+        cpp_int Mi = M / moduli[i];
         
         auto [gcd, x, y] = extended_euclidean_alg(Mi, moduli[i]);
         if (gcd != 1) {
             std::cout << "Modules is not coprime\n";
             return -1;
         }
-        bi yi = (x % moduli[i] + moduli[i]) % moduli[i];
+        cpp_int yi = (x % moduli[i] + moduli[i]) % moduli[i];
         
         result += remainders[i] * Mi * yi;
     }
@@ -361,11 +361,11 @@ bi solve_1d_congruence_system(const std::vector<bi>& remainders, const std::vect
 }
 
 
-void printPolynomial(const std::vector<bi>& poly) {
+void printPolynomial(const std::vector<cpp_int>& poly) {
     bool first_term = true;
 
     for (int i = poly.size() - 1; i >= 0; i--) {
-        bi coeff = poly[i];
+        cpp_int coeff = poly[i];
         if (coeff == 0) continue;
 
         if (!first_term) {
@@ -391,18 +391,22 @@ void printPolynomial(const std::vector<bi>& poly) {
 }
 
 cpp_int mod_inverse(cpp_int a, cpp_int m) {
-    return std::get<1>(extended_euclidean_alg(a, m));
+    auto [gcd, x, y] = extended_euclidean_alg(a, m);
+    if (gcd != 1) {
+        throw std::runtime_error("Inverse does not exist");
+    }
+    return (x % m + m) % m;
 }
 
-std::vector<bi> galois_field::reduction(const std::vector<bi>& poly) {
+std::vector<cpp_int> galois_field::reduction(const std::vector<cpp_int>& poly) {
     if (poly.size() < irreducible.size()) {
         return poly;
     }
 
-    std::vector<bi> result = poly;
+    std::vector<cpp_int> result = poly;
 
     while (result.size() >= irreducible.size()) {
-        bi coefficient = result.back();
+        cpp_int coefficient = result.back();
 
         if (coefficient == 0) {
             result.pop_back();
@@ -416,7 +420,7 @@ std::vector<bi> galois_field::reduction(const std::vector<bi>& poly) {
             return {};
         }
 
-        bi inv = (x % p + p) % p;
+        cpp_int inv = (x % p + p) % p;
 
         for (size_t i = 0; i < result.size(); ++i) {
             result[i] = (result[i] * inv) % p;
@@ -431,12 +435,12 @@ std::vector<bi> galois_field::reduction(const std::vector<bi>& poly) {
     }
 
     while (!result.empty() && result.back() == 0) { result.pop_back(); } //дроп нулквыы\х
-    return result.empty() ? std::vector<bi>{0} : result;
+    return result.empty() ? std::vector<cpp_int>{0} : result;
 }
 
 
-std::vector<bi> galois_field::product(const std::vector<bi>& first, const std::vector<bi>& second) {
-    std::vector<bi> result(first.size() + second.size() - 1, 0);
+std::vector<cpp_int> galois_field::product(const std::vector<cpp_int>& first, const std::vector<cpp_int>& second) {
+    std::vector<cpp_int> result(first.size() + second.size() - 1, 0);
     for (size_t i = 0; i < first.size(); ++i) {
         for (size_t j = 0; j < second.size(); ++j) {
             result[i + j] += first[i] * second[j];
@@ -447,13 +451,13 @@ std::vector<bi> galois_field::product(const std::vector<bi>& first, const std::v
 }
 
 
-std::vector<bi> galois_field::sum(const std::vector<bi>& first, const std::vector<bi>& second) {
+std::vector<cpp_int> galois_field::sum(const std::vector<cpp_int>& first, const std::vector<cpp_int>& second) {
     size_t max_size = std::max(first.size(), second.size());
-    std::vector<bi> result(max_size, 0);
+    std::vector<cpp_int> result(max_size, 0);
 
 for (size_t i = 0; i < max_size; ++i) {
-        bi a = (i < first.size()) ? first[i] : 0;
-        bi b = (i < second.size()) ? second[i] : 0;
+        cpp_int a = (i < first.size()) ? first[i] : 0;
+        cpp_int b = (i < second.size()) ? second[i] : 0;
         result[i] = (a + b) % p;
     }
 
@@ -474,24 +478,24 @@ void galois_field::print() {
 }
 
 
-bi pollard_method(bi n) {
+cpp_int pollard_method(cpp_int n) {
 
-    auto f = [n](bi x) {
+    auto f = [n](cpp_int x) {
         return (x * x + 1) % n;
     };
 
     for (int attempts = 0; attempts < 10; ++attempts)
     {
         boost::random::mt19937 gen(std::random_device{}());
-        boost::random::uniform_int_distribution<bi> dist(2, n - 1);
-        bi c = dist(gen);
-        bi a = c;
-        bi b = c;
+        boost::random::uniform_int_distribution<cpp_int> dist(2, n - 1);
+        cpp_int c = dist(gen);
+        cpp_int a = c;
+        cpp_int b = c;
         
         while (true) {
             a = f(a);
             b = f(f(b));
-            bi d = std::get<0>(extended_euclidean_alg(a - b, n));
+            cpp_int d = std::get<0>(extended_euclidean_alg(a - b, n));
 
             if (1 < d && d < n) {
                 return d;
@@ -504,20 +508,20 @@ bi pollard_method(bi n) {
 }
 
 
-bi pollard_p1_method(bi n)
+cpp_int pollard_p1_method(cpp_int n)
 {
-    bi p;
+    cpp_int p;
     boost::random::mt19937 gen(std::random_device{}());
-    boost::random::uniform_int_distribution<bi> dist(2, n - 2);
+    boost::random::uniform_int_distribution<cpp_int> dist(2, n - 2);
     
-    bi a = dist(gen);
-    bi d = std::get<0>(extended_euclidean_alg(a, n));
+    cpp_int a = dist(gen);
+    cpp_int d = std::get<0>(extended_euclidean_alg(a, n));
 
     if (d >= 2) {p = d; return p;}
 
     for (auto i : PRIMES)
     {
-        bi l = static_cast<bi>(std::log(n.convert_to<double>()) / std::log(i));
+        cpp_int l = static_cast<cpp_int>(std::log(n.convert_to<double>()) / std::log(i));
         
         a = fast_exp_mod(a, fast_exp(i, l), n);
 
@@ -544,7 +548,7 @@ std::vector<cpp_int> find_divisors_sqrt(cpp_int n) {
 }
 
 
-bi find_r(bi a, bi p)
+cpp_int find_r(cpp_int a, cpp_int p)
 {
     if (std::get<0>(extended_euclidean_alg(a, p)) != 1) {
         if (!miller_rabin_test(p)) {
@@ -553,8 +557,8 @@ bi find_r(bi a, bi p)
         }
     }
     
-    bi phi_p = p - 1;
-    std::vector<bi> divisors = find_divisors_sqrt(phi_p);
+    cpp_int phi_p = p - 1;
+    std::vector<cpp_int> divisors = find_divisors_sqrt(phi_p);
 
     for (auto d : divisors) {
         if (fast_exp_mod(a, d, p) == 1) {
@@ -565,14 +569,14 @@ bi find_r(bi a, bi p)
 }
 
 
-std::vector<bi> pollard_p_method(bi p, bi a, bi b)
+std::vector<cpp_int> pollard_p_method(cpp_int p, cpp_int a, cpp_int b)
 {
     if (!miller_rabin_test(p)) {
         printf("P is not prime\n");
         return {-1};
     }
 
-    bi r = find_r(a, p);
+    cpp_int r = find_r(a, p);
     if (r == -1)
     {
         printf("Cannot find valid r\n");
@@ -586,10 +590,10 @@ std::vector<bi> pollard_p_method(bi p, bi a, bi b)
     }
     
     // c = (a^v)*(b^v) (mod p)
-    bi c = fast_exp_mod(a, 2, p) * fast_exp_mod(b, 2, p) % p;
-    bi d = c;
+    cpp_int c = fast_exp_mod(a, 2, p) * fast_exp_mod(b, 2, p) % p;
+    cpp_int d = c;
     
-    auto f = [p, a, b](bi c, bi& u, bi& v) {
+    auto f = [p, a, b](cpp_int c, cpp_int& u, cpp_int& v) {
         if (c < p / 2) {
             c = (a * c) % p;
             u = (u + 1);
@@ -600,8 +604,8 @@ std::vector<bi> pollard_p_method(bi p, bi a, bi b)
         return c;
     };
 
-    bi u_c = 2, v_c = 2;
-    bi u_d = 2, v_d = 2; 
+    cpp_int u_c = 2, v_c = 2;
+    cpp_int u_d = 2, v_d = 2; 
 
     uint16_t steps = 0;
     while (true) {
@@ -620,7 +624,7 @@ std::vector<bi> pollard_p_method(bi p, bi a, bi b)
         }
     }
 
-    std::vector<bi> solutions = solve_1d_congruence((v_c - v_d + r) % r, (u_d - u_c + r) % r, r);
+    std::vector<cpp_int> solutions = solve_1d_congruence((v_c - v_d + r) % r, (u_d - u_c + r) % r, r);
 
     if (solutions.empty()) {
         printf("Решений нет\n");
@@ -631,8 +635,8 @@ std::vector<bi> pollard_p_method(bi p, bi a, bi b)
 }
 
 
-std::vector<std::tuple<bi, bi, bi>> file_read(const std::string& filename) {
-    std::vector<std::tuple<bi, bi, bi>> coefficients;
+std::vector<std::tuple<cpp_int, cpp_int, cpp_int>> file_read(const std::string& filename) {
+    std::vector<std::tuple<cpp_int, cpp_int, cpp_int>> coefficients;
     std::ifstream file(filename);
 
     if (!file.is_open()) {
@@ -640,7 +644,7 @@ std::vector<std::tuple<bi, bi, bi>> file_read(const std::string& filename) {
         return coefficients;
     }
 
-    bi p, a, b;
+    cpp_int p, a, b;
     while (file >> p >> a >> b) {
         coefficients.push_back(std::make_tuple(p, a, b));
     }
@@ -652,7 +656,7 @@ std::vector<std::tuple<bi, bi, bi>> file_read(const std::string& filename) {
 
 void pollard_method_file_tests(std::string filename)
 {
-    std::vector<std::tuple<bi, bi, bi>> coefficients = file_read(filename);
+    std::vector<std::tuple<cpp_int, cpp_int, cpp_int>> coefficients = file_read(filename);
 
     if (coefficients.empty()) {
         std::cerr << "File empty or cannot be read.\n";
@@ -660,9 +664,9 @@ void pollard_method_file_tests(std::string filename)
     }
 
     for (const auto& tuple : coefficients) {
-        bi p = std::get<0>(tuple);
-        bi a = std::get<1>(tuple);
-        bi b = std::get<2>(tuple);
+        cpp_int p = std::get<0>(tuple);
+        cpp_int a = std::get<1>(tuple);
+        cpp_int b = std::get<2>(tuple);
 
         std::cout << "("<< p << ", " << a << ", " << b << ") : ";
 
@@ -711,12 +715,12 @@ std::vector<uint8_t> PKCS7_Unpadding(const std::vector<uint8_t>& data) {
 }
 
 
-std::vector<bi> ChunkMessage(const std::vector<uint8_t>& bytes, size_t block_size) {
-    std::vector<bi> chunks;
+std::vector<cpp_int> ChunkMessage(const std::vector<uint8_t>& bytes, size_t block_size) {
+    std::vector<cpp_int> chunks;
     size_t num_blocks = (bytes.size() + block_size - 1) / block_size;
 
     for (size_t i = 0; i < num_blocks; ++i) {
-        bi chunk = 0;
+        cpp_int chunk = 0;
         for (size_t j = 0; j < block_size; ++j) {
             size_t index = i * block_size + j;
             if (index < bytes.size()) {
@@ -732,10 +736,10 @@ std::vector<bi> ChunkMessage(const std::vector<uint8_t>& bytes, size_t block_siz
 }
 
 
-std::vector<uint8_t> UnchunkMessage(const std::vector<bi>& chunks, size_t block_size) {
+std::vector<uint8_t> UnchunkMessage(const std::vector<cpp_int>& chunks, size_t block_size) {
     std::vector<uint8_t> bytes;
 
-    for (const bi& chunk : chunks) {
+    for (const cpp_int& chunk : chunks) {
         for (size_t i = 0; i < block_size; ++i) {
             uint8_t byte = static_cast<uint8_t>((chunk >> (8 * (block_size - 1 - i))) & 0xFF);
             bytes.push_back(byte);
@@ -764,13 +768,13 @@ std::string BytesToText(const std::vector<uint8_t>& bytes) {
 }
 
 
-std::map<std::string, bi> ReadKey(const std::string& KeyFile) {
+std::map<std::string, cpp_int> ReadKey(const std::string& KeyFile) {
     std::ifstream file(KeyFile);
     if (!file.is_open()) {
         std::cout << ("Failed to open public key file: " + KeyFile + "\n");
     }
 
-    std::map<std::string, bi> Key;
+    std::map<std::string, cpp_int> Key;
     std::string line;
     std::getline(file, line);
 
@@ -784,7 +788,7 @@ std::map<std::string, bi> ReadKey(const std::string& KeyFile) {
             break;
         }
 
-        Key[keyName] = bi(value);
+        Key[keyName] = cpp_int(value);
     }
 
     file.close();

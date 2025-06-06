@@ -235,6 +235,8 @@
       <SDLCheck>true</SDLCheck>
       <LinkCompiled>true</LinkCompiled>
     </ClCompile>
+    <ClCompile Include="auth\blom-key-exchange.cpp" />
+    <ClCompile Include="auth\diffie-hellman-key-exchange.cpp" />
     <ClCompile Include="auth\fiat-shamir.cpp" />
     <ClCompile Include="auth\key-exchange.cpp" />
     <ClCompile Include="auth\single-use-passwords.cpp">
@@ -311,6 +313,7 @@
       <SDLCheck>true</SDLCheck>
       <LinkCompiled>true</LinkCompiled>
     </ClCompile>
+    <ClCompile Include="auth\SPEKE.cpp" />
     <ClCompile Include="auth\three-pass-symmetric.cpp" />
     <ClCompile Include="auth\two-pass-symmetric.cpp">
       <RuntimeLibrary>MultiThreadedDebugDll</RuntimeLibrary>
@@ -402,6 +405,7 @@
   <ItemGroup>
     <ClInclude Include="alghoritms.h" />
     <ClInclude Include="auth\auth-client.hpp" />
+    <ClInclude Include="auth\auth-tsa-server.hpp" />
     <ClInclude Include="cipher-systems\AES\AES.hpp" />
     <ClInclude Include="cipher-systems\ELGAMAL\elgamal.h" />
     <ClInclude Include="cipher-systems\FIAT_SHAMIR\fiat-shamir.h" />
@@ -412,11 +416,14 @@
     <ClInclude Include="digital-signature\group-ds\group-ds-node.hpp" />
     <ClInclude Include="digital-signature\group-ds\group-ds-tsa-server.hpp" />
     <ClInclude Include="hash-functions\hash-functions.h" />
+    <ClInclude Include="shamir-secret-sharing\shamir-secret-sharing.hpp" />
     <ClInclude Include="templates\asio-networking-template.h" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="auth\keys\private.key" />
     <Content Include="auth\keys\public.key" />
+    <Content Include="auth\keys\tsa-keys\private.key" />
+    <Content Include="auth\keys\tsa-keys\public.key" />
     <Content Include="auth\temp\encrypted.txt" />
     <Content Include="auth\temp\passwords.json" />
     <Content Include="auth\temp\plaintext.txt" />
@@ -454,6 +461,7 @@
     <Content Include="digital-signature\group-ds\temp\group-ds-tsa\private.key" />
     <Content Include="digital-signature\group-ds\temp\group-ds-tsa\public.key" />
     <Content Include="README.md" />
+    <Content Include="shamir-secret-sharing\temp\splitted.txt" />
     <Content Include="tests.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

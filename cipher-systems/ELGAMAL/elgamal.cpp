@@ -1,9 +1,9 @@
 #include "elgamal.h"
 
 
-bi ELGAMAL::findPrimitive(const bi& p) {
+cpp_int ELGAMAL::findPrimitive(const cpp_int& p) {
     // (bi alpha = 2; alpha < p; ++alpha) или (bi alpha = p - 2; alpha >= 2; --alpha) влияет ли на стойкость?
-    for (bi alpha = p - 2; alpha >= 2; --alpha) {
+    for (cpp_int alpha = p - 2; alpha >= 2; --alpha) {
         // Он не совсем примитивный, но в рамках лабы обладает нужными свойствами. (c Кирчик)
         //            a^2 != +-1 mod p
         //            a^((p-1)/2) == 1 mod p
@@ -23,22 +23,22 @@ bi ELGAMAL::findPrimitive(const bi& p) {
 void ELGAMAL::GenerateKeys(const std::string& publicKeyFile, const std::string& privateKeyFile, uint64_t keySize)
 {
 
-    bi p = generate_prime(keySize);
-    bi a = generate_prime(keySize / 2);
-    bi alpha = findPrimitive(p); //ну да но нет
-    bi beta = fast_exp_mod(alpha, a, p); // beta = alpha^a mod p
+    cpp_int p = generate_prime(keySize);
+    cpp_int a = generate_prime(keySize / 2);
+    cpp_int alpha = findPrimitive(p); //ну да но нет
+    cpp_int beta = fast_exp_mod(alpha, a, p); // beta = alpha^a mod p
 
     // std::cout << "p: " << p << "\n";
     // std::cout << "a: " << a << "\n";
     // std::cout << "alpha: " << alpha << "\n";
     // std::cout << "beta: " << beta << "\n";
     
-    std::map<std::string, bi> publicKey = {
+    std::map<std::string, cpp_int> publicKey = {
         {"p", p},
         {"alpha", alpha},
         {"beta", beta}
     };
-    std::map<std::string, bi> privateKey = {
+    std::map<std::string, cpp_int> privateKey = {
         {"p", p},
 
         {"alpha", alpha},
@@ -54,7 +54,7 @@ void ELGAMAL::GenerateKeys(const std::string& publicKeyFile, const std::string& 
 
 
 
-std::vector<bi> ELGAMAL::Encrypt(const std::string& plaintextFile, const std::string& publicKeyFile)
+std::vector<cpp_int> ELGAMAL::Encrypt(const std::string& plaintextFile, const std::string& publicKeyFile)
 {
     std::ifstream file(plaintextFile);
     if (!file.is_open()) {
@@ -68,9 +68,9 @@ std::vector<bi> ELGAMAL::Encrypt(const std::string& plaintextFile, const std::st
     file.close();
 
     auto publicKey = ReadKey(publicKeyFile);
-    bi p = publicKey["p"];
-    bi alpha = publicKey["alpha"]; // ))
-    bi beta = publicKey["beta"];
+    cpp_int p = publicKey["p"];
+    cpp_int alpha = publicKey["alpha"]; // ))
+    cpp_int beta = publicKey["beta"];
 
     // for (auto [key, value] : publicKey) {
     //     std::cout << key << " " << value << "\n";
@@ -78,16 +78,16 @@ std::vector<bi> ELGAMAL::Encrypt(const std::string& plaintextFile, const std::st
     
     std::vector<uint8_t> bytes = TextToBytes(plaintext);
     bytes = PKCS7_Padding(bytes, elgamal_encryption_block_size);
-    std::vector<bi> chunks = ChunkMessage(bytes, elgamal_encryption_block_size);
-    std::vector<bi> ciphertext;
+    std::vector<cpp_int> chunks = ChunkMessage(bytes, elgamal_encryption_block_size);
+    std::vector<cpp_int> ciphertext;
 
     for (auto chunk : chunks)
     {
         boost::random::mt19937 gen(std::random_device{}());
-        boost::random::uniform_int_distribution<bi> dist(0, p - 2);
-        bi ephemeral_key = dist(gen);
-        bi c1 = fast_exp_mod(alpha, ephemeral_key, p);
-        bi c2 = chunk * fast_exp_mod(beta, ephemeral_key, p);
+        boost::random::uniform_int_distribution<cpp_int> dist(0, p - 2);
+        cpp_int ephemeral_key = dist(gen);
+        cpp_int c1 = fast_exp_mod(alpha, ephemeral_key, p);
+        cpp_int c2 = chunk * fast_exp_mod(beta, ephemeral_key, p);
 
         ciphertext.push_back(c1);
         ciphertext.push_back(c2);
@@ -99,8 +99,8 @@ std::vector<bi> ELGAMAL::Encrypt(const std::string& plaintextFile, const std::st
 
 std::string ELGAMAL::Decrypt(const std::string& ciphertextFile, const std::string& privateKeyFile) {
     auto privateKey = ReadKey(privateKeyFile);
-    bi p = privateKey["p"];
-    bi a = privateKey["a"];
+    cpp_int p = privateKey["p"];
+    cpp_int a = privateKey["a"];
 
     std::ifstream file(ciphertextFile);
     if (!file.is_open()) {
@@ -109,7 +109,7 @@ std::string ELGAMAL::Decrypt(const std::string& ciphertextFile, const std::strin
     }
 
     std::string line;
-    std::vector<bi> ciphertext;
+    std::vector<cpp_int> ciphertext;
 
     while (std::getline(file, line)) {
         if (line.find("encryptedContent:") != std::string::npos) {
@@ -123,7 +123,7 @@ std::string ELGAMAL::Decrypt(const std::string& ciphertextFile, const std::strin
         }
 
         if (line.substr(0, 2) == "0x") {
-            bi number;
+            cpp_int number;
             std::istringstream iss(line.substr(2));
             iss >> std::hex >> number;
             ciphertext.push_back(number);
@@ -136,12 +136,12 @@ std::string ELGAMAL::Decrypt(const std::string& ciphertextFile, const std::strin
 
     for (size_t i = 0; i < ciphertext.size(); i += 2)
     {
-        bi c1 = ciphertext[i];
-        bi c2 = ciphertext[i + 1];
-        bi c1_inv = fast_exp_mod(c1, a, p);
+        cpp_int c1 = ciphertext[i];
+        cpp_int c2 = ciphertext[i + 1];
+        cpp_int c1_inv = fast_exp_mod(c1, a, p);
         
         c1_inv = std::get<1>(extended_euclidean_alg(c1_inv, p));
-        bi m = c2 * c1_inv % p;
+        cpp_int m = c2 * c1_inv % p;
         if (m < 0) {m += p;}
         
         std::vector<uint8_t> decryptedMessage = UnchunkMessage({m}, elgamal_encryption_block_size);
@@ -154,7 +154,7 @@ std::string ELGAMAL::Decrypt(const std::string& ciphertextFile, const std::strin
 
 
 
-void ELGAMAL::WritePublicKey(const std::map<std::string, bi>& keyContainer, const std::string& keyFile)
+void ELGAMAL::WritePublicKey(const std::map<std::string, cpp_int>& keyContainer, const std::string& keyFile)
 {
     std::ofstream file(keyFile);
     if (!file.is_open()) {
@@ -172,7 +172,7 @@ void ELGAMAL::WritePublicKey(const std::map<std::string, bi>& keyContainer, cons
 }
 
 
-void ELGAMAL::WritePrivateKey(const std::map<std::string, bi>& keyContainer, const std::string& keyFile)
+void ELGAMAL::WritePrivateKey(const std::map<std::string, cpp_int>& keyContainer, const std::string& keyFile)
 {
     std::ofstream file(keyFile);
     if (!file.is_open()) {
@@ -193,7 +193,7 @@ void ELGAMAL::WritePrivateKey(const std::map<std::string, bi>& keyContainer, con
 }
 
 
-void ELGAMAL::WriteEncryptedMessage(const std::vector<bi>& ciphertext, const std::string& filename) {
+void ELGAMAL::WriteEncryptedMessage(const std::vector<cpp_int>& ciphertext, const std::string& filename) {
     std::ofstream file(filename);
     if (!file.is_open()) {
         throw std::runtime_error("Failed to open file: " + filename);
@@ -205,7 +205,7 @@ void ELGAMAL::WriteEncryptedMessage(const std::vector<bi>& ciphertext, const std
     file << "    ContentEncryptionAlgorithmIdentifier:    elgamalEncryption\n";
     file << "    encryptedContent:\n";
 
-    for (const bi& num : ciphertext) {
+    for (const cpp_int& num : ciphertext) {
         std::stringstream hexStream;
         hexStream << std::hex << num;
         std::string hexStr = hexStream.str();

@@ -13,7 +13,8 @@
 #include "cipher-systems/FIAT_SHAMIR/fiat-shamir.h"
 #include "cipher-systems/AES/AES.hpp"
 #include "digital-signature/group-ds/group-ds-tsa-server.hpp"
-
+#include "auth/auth-tsa-server.hpp"
+#include "shamir-secret-sharing/shamir-secret-sharing.hpp"
 
 bool is_tsa_server() {
     const std::string lock_file = "tsa_server.lock";
@@ -151,14 +152,15 @@ int main() {
 
     // AuthClient AuthClient("Alice", Proto::KeyExchange);
     // AuthClient.Run();
-    
+
+    /*
      int res = 0;
      std::cin >> res;
      if (res == 0) {
          // DSClient<RSA, SHA256> DSClient("127.0.0.1", "8888", "MessageToSign");
          // DSClient.Run();
          
-         AuthServer AuthServer("Bob", Proto::KeyExchange);
+         AuthServer AuthServer("Bob", Proto::BlomKeyExchange);
          AuthServer.Run();
     
          // asioLocalNetworkingTemplate serv;
@@ -166,7 +168,7 @@ int main() {
          // res = serv.ListenAndReceive("9999");
          // res = serv.ListenAndReceive(9999);
          
-     } else
+     } else if (res == 1)
      {
          // asioLocalNetworkingTemplate zxcv234;
          // zxcv234.SendMsg(9999, "123123123Hello");
@@ -176,15 +178,27 @@ int main() {
          // DSServer DSServer("127.0.0.1", "8888");
          // DSServer.Run();
          
-         AuthClient AuthClient("Alice", Proto::KeyExchange);
+         AuthClient AuthClient("Alice", Proto::BlomKeyExchange);
          AuthClient.Run();
     
          
+     } else if (res == 2)
+     {
+         AuthTSA TSA_Server(Proto::BlomKeyExchange);
+         TSA_Server.Run();
      }
+     
      std::cin.get();
+     
 
-    //*/
+    */
 
+    std::string secret = "Hello i am very secret message";
+    cpp_int n = 10, k = 3;
+    cpp_int p = generate_prime(512);
+    auto points = ShamirSecretSharing::SplitSecret(p, secret, n, k);
+    std::string recovered = ShamirSecretSharing::RecoverSecret(p, {points[0], points[1], points[2]});
+    std::cout <<  "Recovered: " << recovered << "\n";
 
     
     // AuthServer Bob;

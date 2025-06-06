@@ -1,6 +1,5 @@
 #include "auth-client.hpp"
 #include "auth-server.hpp"
-#include <fstream>
 
 void AuthClient::KeyExchangeSequence()
 {
@@ -21,18 +20,15 @@ void AuthClient::KeyExchangeSequence()
     
     std::string MessageToEncrypt = SessionKey + ":" + Timestamp + ":" + SignedMessage;
 
-    // write plaintext to file
     std::ofstream PlaintextFile(PlaintextPath);
     if (PlaintextFile.is_open()) {
         PlaintextFile << MessageToEncrypt;
         PlaintextFile.close();
     }
 
-    // encrypt and write to file
-    std::vector<bi> Ciphertext = RSA::Encrypt(PlaintextPath, PublicKeyPath);
+    std::vector<cpp_int> Ciphertext = RSA::Encrypt(PlaintextPath, PublicKeyPath);
     RSA::WriteEncryptedMessage(Ciphertext, EncryptedTextPath);
 
-    // read encrypted message
     std::ifstream File(EncryptedTextPath);
     std::stringstream Ss;
     Ss << File.rdbuf();
@@ -50,7 +46,6 @@ void AuthServer::KeyExchangeSequence()
 {
     std::string ClientMessage = ListenAndReceive(8888);
 
-    // write received message to file
     std::ofstream File(EncryptedTextPath);
     if (File.is_open()) {
         File << ClientMessage;
@@ -58,7 +53,6 @@ void AuthServer::KeyExchangeSequence()
         std::cout << "[AuthServer] Wrote received message to " << EncryptedTextPath << "\n";
     }
 
-    // decrypt message
     std::string DecryptedMessage = RSA::Decrypt(EncryptedTextPath, PrivateKeyPath);
     std::cout << "[AuthServer] Decrypted: " << DecryptedMessage << "\n";
     

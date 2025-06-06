@@ -26,14 +26,15 @@ enum class Proto {
                     SingleUsePasswords,
                     FiatShamir,
                     KeyExchange,
+                    DiffieHellmanKeyExchange,
+                    SPEKE, //Simple Password Exponential Key Exchange
+                    BlomKeyExchange,
                 };
 
 class AuthClient : public asioLocalNetworkingTemplate {
 public:
     AuthClient(std::string ID, Proto proto = Proto::TwoPassSymmetric, NonceType nonce_type = NonceType::RandomNumber)
-        : ID(ID), Proto(proto), NonceType(nonce_type)
-    {
-    }
+        : ID(ID), Proto(proto), NonceType(nonce_type) {}
 
     void TwoPassSymmetricSequence();
     void ThreePassSymmetricSequence();
@@ -41,13 +42,16 @@ public:
     void SingleUsePasswordSequence();
     void FiatShamirSequence();
     void KeyExchangeSequence();
+    void DiffieHellmanSequence();
+    void SPEKE_Sequence();
+    void BlomSequence(); //Use with TSA only (auth-tsa-server.hpp)
 
     void Run()
     {
         if (Proto == Proto::TwoPassSymmetric) {
             TwoPassSymmetricSequence();
         }
-        if (Proto == Proto::ThreePassSymmetric) {
+        else if (Proto == Proto::ThreePassSymmetric) {
             ThreePassSymmetricSequence();
         }
         else if (Proto == Proto::Asymmetric) {
@@ -61,6 +65,16 @@ public:
         }
         else if (Proto == Proto::KeyExchange) {
             KeyExchangeSequence();
+        }
+        else if (Proto == Proto::DiffieHellmanKeyExchange){
+            DiffieHellmanSequence();
+        }
+        else if (Proto == Proto::SPEKE) { 
+            SPEKE_Sequence();
+        }
+        else if (Proto == Proto::BlomKeyExchange)
+        {
+            BlomSequence();
         }
     }
 

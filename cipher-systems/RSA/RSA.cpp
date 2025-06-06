@@ -1,8 +1,8 @@
 #include "RSA.h"
 
 void RSA::GenerateKeys(const std::string& publicKeyFile, const std::string& privateKeyFile, uint64_t keySize) {
-    bi p = generate_prime(keySize / 2);
-    bi q = generate_prime(keySize / 2);
+    cpp_int p = generate_prime(keySize / 2);
+    cpp_int q = generate_prime(keySize / 2);
 
     while (true) {
         if (p == q) {
@@ -10,11 +10,11 @@ void RSA::GenerateKeys(const std::string& publicKeyFile, const std::string& priv
         } else { break; }
     }
 
-    bi n = p * q;
-    bi phi = (p - 1) * (q - 1);
-    bi e;
+    cpp_int n = p * q;
+    cpp_int phi = (p - 1) * (q - 1);
+    cpp_int e;
     boost::random::mt19937 gen(std::random_device{}());
-    boost::random::uniform_int_distribution<bi> dist(fast_exp(2, 15), fast_exp(2, 18));
+    boost::random::uniform_int_distribution<cpp_int> dist(fast_exp(2, 15), fast_exp(2, 18));
 
     while (true) { //поиск взаимнопростого e с phi чтобы существовала обратная d
         e = dist(gen);
@@ -24,7 +24,7 @@ void RSA::GenerateKeys(const std::string& publicKeyFile, const std::string& priv
     }
     
     e = 65537; //overwrite (stable)
-    bi d = std::get<1>(extended_euclidean_alg(e, phi));
+    cpp_int d = std::get<1>(extended_euclidean_alg(e, phi));
     if (d <= 0) d+= phi;
     if ((e * d) % phi != 1) {
         std::cout << "Invalid private key: (e * d) % phi != 1\n";
@@ -36,7 +36,7 @@ void RSA::GenerateKeys(const std::string& publicKeyFile, const std::string& priv
     std::map<std::string, cpp_int> publicKey = {{"e", e}, {"n", n}};
     WritePublicKey(publicKey, publicKeyFile);
 
-    std::map<std::string, bi> privateKey = {
+    std::map<std::string, cpp_int> privateKey = {
         {"d", d},
         {"n", n},
         {"p", p},
@@ -49,7 +49,7 @@ void RSA::GenerateKeys(const std::string& publicKeyFile, const std::string& priv
 }
 
 
-std::vector<bi> RSA::Encrypt(const std::string& plaintextFile, const std::string& publicKeyFile) {
+std::vector<cpp_int> RSA::Encrypt(const std::string& plaintextFile, const std::string& publicKeyFile) {
     std::ifstream file(plaintextFile);
     if (!file.is_open()) {
         printf("Failed to open plaintext file");
@@ -62,18 +62,18 @@ std::vector<bi> RSA::Encrypt(const std::string& plaintextFile, const std::string
     file.close();
 
     auto publicKey = ReadKey(publicKeyFile);
-    bi e = publicKey["publicExponent"];
-    bi n = publicKey["N"];
+    cpp_int e = publicKey["publicExponent"];
+    cpp_int n = publicKey["N"];
 
     std::vector<uint8_t> bytes = TextToBytes(plaintext);
     bytes = PKCS7_Padding(bytes, rsa_encryption_block_size);
     
-    std::vector<bi> chunks = ChunkMessage(bytes, rsa_encryption_block_size);
+    std::vector<cpp_int> chunks = ChunkMessage(bytes, rsa_encryption_block_size);
     
-    std::vector<bi> ciphertext;
-    for (const bi& chunk : chunks) {
+    std::vector<cpp_int> ciphertext;
+    for (const cpp_int& chunk : chunks) {
         //std::cout << std::hex << chunk << '\n';
-        bi c = fast_exp_mod(chunk, e, n);
+        cpp_int c = fast_exp_mod(chunk, e, n);
         ciphertext.push_back(c);
     }
 
@@ -83,8 +83,8 @@ std::vector<bi> RSA::Encrypt(const std::string& plaintextFile, const std::string
 
 std::string RSA::Decrypt(const std::string& ciphertextFile, const std::string& privateKeyFile) {
     auto privateKey = ReadKey(privateKeyFile);
-    bi d = privateKey["privateExponent"];
-    bi n = privateKey["prime1"] * privateKey["prime2"];
+    cpp_int d = privateKey["privateExponent"];
+    cpp_int n = privateKey["prime1"] * privateKey["prime2"];
 
     std::ifstream file(ciphertextFile);
     if (!file.is_open()) {
@@ -93,7 +93,7 @@ std::string RSA::Decrypt(const std::string& ciphertextFile, const std::string& p
     }
 
     std::string line;
-    std::vector<bi> ciphertext;
+    std::vector<cpp_int> ciphertext;
 
     while (std::getline(file, line)) {
         if (line.find("encryptedContent:") != std::string::npos) {
@@ -107,7 +107,7 @@ std::string RSA::Decrypt(const std::string& ciphertextFile, const std::string& p
         }
 
         if (line.substr(0, 2) == "0x") {
-            bi number;
+            cpp_int number;
             std::istringstream iss(line.substr(2));
             iss >> std::hex >> number;
             ciphertext.push_back(number);
@@ -116,9 +116,9 @@ std::string RSA::Decrypt(const std::string& ciphertextFile, const std::string& p
 
     file.close();
 
-    std::vector<bi> chunks;
-    for (bi c : ciphertext) {
-        bi m = fast_exp_mod(c, d, n);
+    std::vector<cpp_int> chunks;
+    for (cpp_int c : ciphertext) {
+        cpp_int m = fast_exp_mod(c, d, n);
         chunks.push_back(m);
     }
     
@@ -130,7 +130,7 @@ std::string RSA::Decrypt(const std::string& ciphertextFile, const std::string& p
 }
 
 
-void RSA::WritePublicKey(const std::map<std::string, bi>& key, const std::string& keyFile) {
+void RSA::WritePublicKey(const std::map<std::string, cpp_int>& key, const std::string& keyFile) {
     std::ofstream file(keyFile);
     if (!file.is_open()) {
         std::cout << "Failed to open " << keyFile << " for writing." << std::endl;
@@ -146,7 +146,7 @@ void RSA::WritePublicKey(const std::map<std::string, bi>& key, const std::string
 }
 
 
-void RSA::WritePrivateKey(const std::map<std::string, bi>& key, const std::string& keyFile) {
+void RSA::WritePrivateKey(const std::map<std::string, cpp_int>& key, const std::string& keyFile) {
     std::ofstream file(keyFile);
     if (!file.is_open()) {
         std::cout << "Failed to open " << keyFile << " for writing." << std::endl;
@@ -166,7 +166,7 @@ void RSA::WritePrivateKey(const std::map<std::string, bi>& key, const std::strin
 }
 
 
-void RSA::WriteEncryptedMessage(const std::vector<bi>& ciphertext, const std::string& filename) {
+void RSA::WriteEncryptedMessage(const std::vector<cpp_int>& ciphertext, const std::string& filename) {
     std::ofstream file(filename);
     if (!file.is_open()) {
         std::cout << "Failed to open file: " + filename << "\n";
@@ -178,7 +178,7 @@ void RSA::WriteEncryptedMessage(const std::vector<bi>& ciphertext, const std::st
     file << "    ContentEncryptionAlgorithmIdentifier:    rsaEncryption\n";
     file << "    encryptedContent:\n";
     
-    for (const bi& num : ciphertext) {
+    for (const cpp_int& num : ciphertext) {
         std::stringstream hexStream;
         hexStream << std::hex << num;
         std::string hexStr = hexStream.str();
@@ -212,8 +212,8 @@ std::string RSA::DigitalSigEncrypt(const std::string& Message, const std::string
 
 bool RSA::DigitalSigValidate(const std::string& Message, const std::string& SignedContent, std::function<std::string(std::string)> HashFunction, const std::string& publicKeyFile) {
     auto publicKey = ReadKey(publicKeyFile);
-    bi e = publicKey["publicExponent"];
-    bi n = publicKey["N"];
+    cpp_int e = publicKey["publicExponent"];
+    cpp_int n = publicKey["N"];
     std::string HashToCompare = HashFunction(Message);
     
     cpp_int Encrypted = cpp_int(SignedContent);

@@ -18,7 +18,6 @@
 using namespace boost::multiprecision;
 
 typedef boost::multiprecision::cpp_dec_float_100 bf;
-typedef boost::multiprecision::cpp_int bi;
 
 inline std::vector<int> PRIMES = {2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89,
                            97, 101, 103, 107, 109, 113, 127, 131, 137, 139, 149, 151, 157, 163, 167, 173, 179, 181, 191,
@@ -33,41 +32,41 @@ inline std::vector<int> PRIMES = {2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41
 class galois_field
 {
 public:
-    galois_field(bi p, bi k, std::vector<bi> irreducible)
+    galois_field(cpp_int p, cpp_int k, std::vector<cpp_int> irreducible)
     : p(p), k(k), irreducible(std::move(irreducible)) {}
 
-    std::vector<bi> product(const std::vector<bi>& first, const std::vector<bi>& second);
-    std::vector<bi> sum(const std::vector<bi>& first, const std::vector<bi>& second);
+    std::vector<cpp_int> product(const std::vector<cpp_int>& first, const std::vector<cpp_int>& second);
+    std::vector<cpp_int> sum(const std::vector<cpp_int>& first, const std::vector<cpp_int>& second);
     void print();
 
 private:
-    bi p;
-    bi k;
-    std::vector<bi> irreducible;
-    std::vector<bi> reduction(const std::vector<bi>& poly);
+    cpp_int p;
+    cpp_int k;
+    std::vector<cpp_int> irreducible;
+    std::vector<cpp_int> reduction(const std::vector<cpp_int>& poly);
 };
 
 
-bi fast_exp(bi base, bi exponent);
-bi fast_exp_mod(bi base, bi exponent, bi modulus);
-std::tuple<bi, bi, bi> extended_euclidean_alg(bi x, bi y);
-bi jacobi(bi a, bi p);                                          
-bool fermat_test(bi n);
-bool solovay_strassen_test(bi n);
-bool miller_rabin_test(bi n);
-std::string ferma(const bi& number);
-bi generate_prime(uint64_t k);
-bi generate_prime_in_range(cpp_int from, cpp_int to);
-std::vector<bi> solve_1d_congruence(bi a, bi b, bi p);
-std::tuple<bi, bi> solve_2d_congruence(bi a, bi p);
-bi solve_1d_congruence_system(const std::vector<bi>& remainders, const std::vector<bi>& moduli);
-void printPolynomial(const std::vector<bi>& poly);
-bi pollard_method(bi n);
-bi pollard_p1_method(bi n);
+cpp_int fast_exp(cpp_int base, cpp_int exponent);
+cpp_int fast_exp_mod(cpp_int base, cpp_int exponent, cpp_int modulus);
+std::tuple<cpp_int, cpp_int, cpp_int> extended_euclidean_alg(cpp_int x, cpp_int y);
+cpp_int jacobi(cpp_int a, cpp_int p);                                          
+bool fermat_test(cpp_int n);
+bool solovay_strassen_test(cpp_int n);
+bool miller_rabin_test(cpp_int n);
+std::string ferma(const cpp_int& number);
+cpp_int generate_prime(uint64_t k);
+cpp_int generate_prime_in_range(cpp_int from, cpp_int to);
+std::vector<cpp_int> solve_1d_congruence(cpp_int a, cpp_int b, cpp_int p);
+std::tuple<cpp_int, cpp_int> solve_2d_congruence(cpp_int a, cpp_int p);
+cpp_int solve_1d_congruence_system(const std::vector<cpp_int>& remainders, const std::vector<cpp_int>& moduli);
+void printPolynomial(const std::vector<cpp_int>& poly);
+cpp_int pollard_method(cpp_int n);
+cpp_int pollard_p1_method(cpp_int n);
 std::vector<cpp_int> find_divisors_sqrt(cpp_int n);
-std::vector<bi>  pollard_p_method(bi p, bi a, bi b);
-bi find_r(bi a, bi p);
-std::vector<std::tuple<bi, bi, bi>> file_read(const std::string& filename);
+std::vector<cpp_int>  pollard_p_method(cpp_int p, cpp_int a, cpp_int b);
+cpp_int find_r(cpp_int a, cpp_int p);
+std::vector<std::tuple<cpp_int, cpp_int, cpp_int>> file_read(const std::string& filename);
 void pollard_method_file_tests(std::string filename);
 std::string to_hex(cpp_int num);
 cpp_int mod_inverse(cpp_int a, cpp_int m);
@@ -76,9 +75,9 @@ cpp_int mod_inverse(cpp_int a, cpp_int m);
 std::vector<uint8_t> PKCS7_Padding(const std::vector<uint8_t>& data, size_t block_size);
 std::vector<uint8_t> PKCS7_Unpadding(const std::vector<uint8_t>& data);
 std::string BytesToText(const std::vector<uint8_t>& bytes);
-std::vector<bi> ChunkMessage(const std::vector<uint8_t>& bytes, size_t block_size);
-std::vector<uint8_t> UnchunkMessage(const std::vector<bi>& chunks, size_t block_size);
-std::map<std::string, bi> ReadKey(const std::string& KeyFile);
+std::vector<cpp_int> ChunkMessage(const std::vector<uint8_t>& bytes, size_t block_size);
+std::vector<uint8_t> UnchunkMessage(const std::vector<cpp_int>& chunks, size_t block_size);
+std::map<std::string, cpp_int> ReadKey(const std::string& KeyFile);
 
 // Utility function to convert string to hex
 inline std::string stringToHex(const std::string& input) {

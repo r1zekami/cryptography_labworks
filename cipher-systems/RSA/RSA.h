@@ -6,12 +6,12 @@ class RSA
     static constexpr uint16_t rsa_encryption_block_size{64};
 public:
     static void GenerateKeys(const std::string& publicKeyFile, const std::string& privateKeyFile, uint64_t keySize=512);
-    static std::vector<bi> Encrypt(const std::string& plaintextFile, const std::string& publicKeyFile);
+    static std::vector<cpp_int> Encrypt(const std::string& plaintextFile, const std::string& publicKeyFile);
     static std::string Decrypt(const std::string& ciphertextFile, const std::string& privateKeyFile);
     
-    static void WriteEncryptedMessage(const std::vector<bi>& ciphertext, const std::string& filename);
-    static void WritePublicKey(const std::map<std::string, bi>& key, const std::string& keyFile);
-    static void WritePrivateKey(const std::map<std::string, bi>& key, const std::string& keyFile);
+    static void WriteEncryptedMessage(const std::vector<cpp_int>& ciphertext, const std::string& filename);
+    static void WritePublicKey(const std::map<std::string, cpp_int>& key, const std::string& keyFile);
+    static void WritePrivateKey(const std::map<std::string, cpp_int>& key, const std::string& keyFile);
 
     //digisig part
     inline static std::string GetName() { return "RSA"; }
