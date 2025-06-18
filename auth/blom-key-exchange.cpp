@@ -17,7 +17,7 @@ matrix<cpp_int> matrix_mod(const matrix<cpp_int>& m, const cpp_int& p);
 //
 
 
-void AuthClient::BlomSequence() {
+void AuthClient::BlomSequence() { //ITS ALICE
     // TSA
     std::string received = ListenAndReceive(ALICE_PORT);
     ptree data;
@@ -56,7 +56,7 @@ void AuthClient::BlomSequence() {
     std::cout << "[AuthServer] Session key: " << std::hex << key(0, 0) << "\n\n";
 }
 
-void AuthServer::BlomSequence() {
+void AuthServer::BlomSequence() { //ITS BOB
 
     // TSA
     std::string received = ListenAndReceive(BOB_PORT);

@@ -42,8 +42,7 @@ public:
             std::cout << a << " ";
         }
         std::cout << "\n";
-
-
+        
         // Calculate n points of polynomial 
         std::vector<std::pair<cpp_int, cpp_int>> Points;
         for (cpp_int i = 1; i <= N; ++i) {
@@ -56,7 +55,7 @@ public:
             //Points.emplace_back(x, y); ага щас блять
         }
 
-        // save it to file idk why
+        // aboba
         std::ofstream outFile(Filepath);
         for (const auto& point : Points) {
             outFile << std::dec << point.first << " " << std::hex << point.second << "\n";

@@ -153,14 +153,14 @@ int main() {
     // AuthClient AuthClient("Alice", Proto::KeyExchange);
     // AuthClient.Run();
 
-    /*
+    ///*
      int res = 0;
      std::cin >> res;
      if (res == 0) {
          // DSClient<RSA, SHA256> DSClient("127.0.0.1", "8888", "MessageToSign");
          // DSClient.Run();
          
-         AuthServer AuthServer("Bob", Proto::BlomKeyExchange);
+         AuthServer AuthServer("Bob", Proto::KeyExchange);
          AuthServer.Run();
     
          // asioLocalNetworkingTemplate serv;
@@ -178,7 +178,7 @@ int main() {
          // DSServer DSServer("127.0.0.1", "8888");
          // DSServer.Run();
          
-         AuthClient AuthClient("Alice", Proto::BlomKeyExchange);
+         AuthClient AuthClient("Alice", Proto::KeyExchange);
          AuthClient.Run();
     
          
@@ -191,15 +191,16 @@ int main() {
      std::cin.get();
      
 
-    */
+    //*/
 
-    std::string secret = "Hello i am very secret message";
-    cpp_int n = 10, k = 3;
-    cpp_int p = generate_prime(512);
-    auto points = ShamirSecretSharing::SplitSecret(p, secret, n, k);
-    std::string recovered = ShamirSecretSharing::RecoverSecret(p, {points[0], points[1], points[2]});
-    std::cout <<  "Recovered: " << recovered << "\n";
+    // std::string secret = "Hello i am very secret message";
+    // cpp_int n = 10, k = 3;
+    // cpp_int p = generate_prime(512);
+    // auto points = ShamirSecretSharing::SplitSecret(p, secret, n, k);
+    // std::string recovered = ShamirSecretSharing::RecoverSecret(p, {points[0], points[1], points[2]});
+    // std::cout <<  "Recovered: " << recovered << "\n";
 
+    
     
     // AuthServer Bob;
     // Bob.Run();
